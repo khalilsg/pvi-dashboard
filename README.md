@@ -12,7 +12,8 @@ Filter by body, party, state, incumbency, result and race-call status, and downl
 index.html                       built page (don't edit by hand)
 src/template.html                page source; data is injected at /*__DATA__*/
 scripts/build_data.py            raw sources -> data/races.json + data/candidates.csv
-scripts/build_site.py            data/races.json + template -> index.html
+src/version.js                   version shown in the footer
+scripts/build_site.py            data/races.json + template + version -> index.html
 scripts/update.sh                pull the latest results, then run both builds
 data/raw/                        source snapshots (see Sources)
 data/overrides/certified_results.csv   hand-entered certified totals (take priority)
@@ -27,6 +28,19 @@ data/overrides/certified_results.csv   hand-entered certified totals (take prior
 - **Certified results:** add rows to `data/overrides/certified_results.csv`
   (`race,candidate,party,votes,source`, one row per candidate, e.g. `PA-07,Bob Brooks,Democratic,201234,PA DOS 2026-11-30`).
   All rows for a race replace that race's numbers and mark it "Certified". Pushing an edit triggers a rebuild.
+
+## Versioning
+
+The footer shows the version from `src/version.js`. Bump it on every push that changes the site,
+run `python3 scripts/build_site.py`, and commit both. The automatic data refresh does not bump it.
+
+- same-day follow-up push → third number (1.2 → 1.2.1)
+- first push of the day, minor change → second number (1.2 → 1.3)
+- new pages or major features → first number (1.x → 2.0)
+- docs-only and CI-only changes don't bump
+
+`.githooks/pre-push` blocks a push that leaves the version untouched. Enable it once per clone with
+`git config core.hooksPath .githooks`; bypass with `git push --no-verify`.
 
 ## Method
 
