@@ -51,6 +51,9 @@ run `python3 scripts/build_site.py`, and commit both. The automatic data refresh
 - **Margin** = candidate share − main opponent share (% of all votes), from the candidate's point of view.
 - **PVI-implied margin** = 2 × PVI in the candidate's party's direction (D+5 → D +10 / R −10). It assumes a
   neutral national environment, so in a wave year compare candidates with each other, not with zero.
+- **National environment** = the median amount by which Democrats ran ahead of their PVI-implied margin across
+  every D-vs-R race, recomputed on each refresh. The default baseline is PVI-implied margin shifted by that amount,
+  so a candidate on the diagonal matched a typical candidate of their party. "PVI only" shows the unshifted baseline.
 - **vs. 2024** = candidate margin − their party's 2024 presidential margin in the same state/district.
 - Where a party had no nominee and an independent was the main opponent (≥ 30% of the vote, e.g. NE Senate),
   the independent stands in for that side. Same-party and effectively uncontested races get no comparison.

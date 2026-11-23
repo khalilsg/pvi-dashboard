@@ -86,6 +86,7 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
 .btn[aria-pressed="true"]{background:var(--text-primary);color:var(--surface-1);border-color:var(--text-primary)}
 .btn[disabled]{opacity:.45;cursor:default}
 .btn[hidden]{display:none}
+.seg button[disabled]{opacity:.4;cursor:default}
 .hl-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;margin-top:12px}
 #hit{cursor:pointer}
 </style>
@@ -95,7 +96,7 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
 <div class="wrap">
   <button class="btn theme-toggle" id="theme" aria-label="Toggle dark mode">◐ Theme</button>
   <h1>2026 candidates vs. their district's lean</h1>
-  <p class="sub">Every major-party (and leading independent) candidate for Senate, governor and House in 2026, showing how their margin compared with the margin their state or district's <b>Cook PVI</b> implies, or with the <b>2024 presidential</b> margin. Positive means the candidate ran ahead of the baseline.</p>
+  <p class="sub">Every major-party (and leading independent) candidate for Senate, governor and House in 2026, showing how their margin compared with the margin their state or district's <b>Cook PVI</b> implies once this year's national environment is added, or with the <b>2024 presidential</b> margin. Positive means the candidate ran ahead of the baseline.</p>
 
   <div class="card filters" role="group" aria-label="Filters">
     <div class="f"><label>Body</label><div class="seg" id="f-body"></div></div>
@@ -123,6 +124,7 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
       <div class="f"><label>Highlight</label><div class="seg" id="f-hl"></div></div>
       <button class="btn" id="only" type="button">Only show highlighted</button>
       <button class="btn" id="unpin" type="button" hidden>Clear pins</button>
+      <div class="f" style="margin-left:auto"><label>Zoom</label><div class="seg"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">−</button><button type="button" id="zreset">Reset</button></div></div>
     </div>
     <p class="note" id="hl-note" style="margin-top:6px"></p>
     <div id="chart"><div class="tip" id="tip" role="status"></div></div>
@@ -144,6 +146,7 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
     <ul>
       <li><b>Margin</b> is the candidate's share minus the main opponent's share, as a percentage of all votes in the race, from the candidate's own point of view.</li>
       <li><b>PVI-implied margin</b> is 2 × PVI in the candidate's party's direction (D+5 → Democrat +10, Republican −10). Cook PVI measures two-party lean relative to the nation, so this baseline assumes an evenly split national environment. In a year that leans toward one party, most of that party's candidates will "overperform" by a similar amount, so compare candidates against each other, not against zero.</li>
+      <li><b>National environment</b> is the median amount by which Democrats ran ahead of their PVI-implied margin, across every race with a Democrat-versus-Republican comparison. It is currently <b id="env"></b> and is recomputed whenever results refresh. The default baseline, "PVI + environment", shifts each PVI-implied margin by that amount toward the party the year favored, so a candidate on the diagonal did exactly as well as a typical candidate of their party. "PVI only" shows the unshifted baseline.</li>
       <li><b>vs. 2024</b> is the candidate's margin minus Harris's (for Democrats) or Trump's (for Republicans) 2024 margin in the same state or district.</li>
       <li>Where a party fielded no candidate and an independent was the main opponent (for example Nebraska and Idaho Senate), the independent is used as that side. Same-party contests (California top-two, uncontested seats) have no D-vs-R comparison and are listed with blank values.</li>
     </ul>
@@ -186,14 +189,30 @@ for (const r of DATA.races) {
       margin:c.margin,
       expPvi: (r.pvi_num==null||c.margin==null) ? null : +(2*r.pvi_num*(c.side==='D'?1:-1)).toFixed(1),
       exp24: (r.pres24_margin==null||c.margin==null) ? null : +(r.pres24_margin*(c.side==='D'?1:-1)).toFixed(1),
-      vsPvi:c.vs_pvi, vs24:c.vs_2024, redrawn:r.redrawn, note:r.note, certified:r.certified, pick:c.pick
+      vsPvi:c.vs_pvi, vs24:c.vs_2024, side:c.side, redrawn:r.redrawn, note:r.note, certified:r.certified, pick:c.pick
     });
   }
 }
 
+/* ---------- national environment ---------- */
+// Median Democratic overperformance of PVI across every race with a D-vs-R comparison.
+const DV = DATA.races.map(r=>r.d_vs_pvi).filter(v=>v!=null).sort((a,b)=>a-b);
+const ENV = DV.length ? +((DV[(DV.length-1)>>1]+DV[DV.length>>1])/2).toFixed(1) : 0;
+const ENV_LABEL = ENV>0 ? 'D+'+ENV : ENV<0 ? 'R+'+(-ENV) : 'even';
+for (const r of ROWS) {
+  const sg = r.side==='D' ? 1 : -1;
+  r.expEnv = r.expPvi==null ? null : +(r.expPvi+sg*ENV).toFixed(1);
+  r.vsEnv = r.vsPvi==null ? null : +(r.vsPvi-sg*ENV).toFixed(1);
+}
+const BASES = {
+  env:{short:'PVI + env', long:`PVI plus national environment (${ENV_LABEL})`, tbl:'PVI + env', exp:'expEnv', vs:'vsEnv'},
+  pvi:{short:'PVI', long:'PVI-implied margin', tbl:'PVI-implied', exp:'expPvi', vs:'vsPvi'},
+  '2024':{short:'2024', long:'2024 presidential margin', tbl:'2024 margin', exp:'exp24', vs:'vs24'}
+};
+
 /* ---------- state ---------- */
 const HAS_PICKS = ROWS.some(r=>r.pick);
-const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'pvi', q:'', hl:HAS_PICKS?'picks':'none', only:false});
+const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'env', q:'', hl:HAS_PICKS?'picks':'none', only:false});
 let S = fresh();
 const PINS = new Set();
 const pinKey = r => r.name+'|'+r.race;
@@ -232,7 +251,7 @@ function renderControls(){
   document.getElementById('only').setAttribute('aria-pressed', S.only);
   seg('f-res','res',[['All','All'],['won','Won'],['lost','Lost']]);
   seg('f-call','call',[['All','All'],['called','Called'],['uncalled','Not called'],['certified','Certified']]);
-  seg('f-metric','metric',[['pvi','Cook PVI'],['2024','2024 pres.']]);
+  seg('f-metric','metric',[['env','PVI + environment'],['pvi','PVI only'],['2024','2024 pres.']]);
   document.getElementById('f-state').value=S.state;
   document.getElementById('f-q').value=S.q;
 }
@@ -242,7 +261,11 @@ document.getElementById('f-state').onchange=e=>{S.state=e.target.value;render();
 document.getElementById('f-q').oninput=e=>{S.q=e.target.value;render();};
 document.getElementById('only').onclick=()=>{S.only=!S.only;renderControls();render();};
 document.getElementById('unpin').onclick=()=>{PINS.clear();render();};
-document.getElementById('reset').onclick=()=>{S=fresh();PINS.clear();sortKey=null;sortDir=-1;renderControls();render();};
+document.getElementById('zin').onclick=()=>{ZOOM={cx:VIEW.cx,cy:VIEW.cy,half:Math.max(2,VIEW.half*.6)};render();};
+document.getElementById('zout').onclick=()=>{const h=VIEW.half/.6;ZOOM=h>=VIEW.lim?null:{cx:VIEW.cx,cy:VIEW.cy,half:h};render();};
+document.getElementById('zreset').onclick=()=>{ZOOM=null;render();};
+document.getElementById('reset').onclick=()=>{S=fresh();PINS.clear();ZOOM=null;sortKey=null;sortDir=-1;renderControls();render();};
+document.getElementById('env').textContent=ENV_LABEL;
 document.getElementById('asof').textContent=new Date(DATA.updated_results).toUTCString().replace(':00 GMT',' UTC');
 
 function filtered(){
@@ -253,8 +276,8 @@ function filtered(){
     (S.res==='All'||(S.res==='won')===r.won) && (S.call==='All'||(S.call==='certified'?!!r.certified:(S.call==='called')===r.called)) &&
     (!q || r.name.toLowerCase().includes(q) || r.race.toLowerCase().includes(q)));
 }
-const vsKey=()=>S.metric==='pvi'?'vsPvi':'vs24';
-const expKey=()=>S.metric==='pvi'?'expPvi':'exp24';
+const vsKey=()=>BASES[S.metric].vs;
+const expKey=()=>BASES[S.metric].exp;
 const fmt=v=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1);
 const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -285,7 +308,7 @@ function hlSet(rows){
 
 /* ---------- tiles ---------- */
 function renderTiles(rows){
-  const k=vsKey(), base=S.metric==='pvi'?'PVI':'2024';
+  const k=vsKey(), base=BASES[S.metric].short;
   const med=p=>median(rows.filter(r=>r.party===p&&r[k]!=null).map(r=>r[k]));
   const n=p=>rows.filter(r=>r.party===p&&r[k]!=null).length;
   const best=rows.filter(r=>r[k]!=null).sort((a,b)=>b[k]-a[k])[0];
@@ -304,50 +327,62 @@ const SHAPE={
   R:(x,y,r)=>`<rect x="${x-r*.9}" y="${y-r*.9}" width="${r*1.8}" height="${r*1.8}" rx="1"/>`,
   I:(x,y,r)=>`<path d="M${x},${y-r*1.15}L${x+r*1.1},${y+r*.8}L${x-r*1.1},${y+r*.8}Z"/>`
 };
-let PTS=[], SCALE=null;
+let PTS=[], VIEW=null, ZOOM=null, NO_CLICK_UNTIL=0;
 function renderChart(rows,set){
-  const ek=expKey(), base=S.metric==='pvi'?'PVI-implied margin':'2024 presidential margin';
+  const ek=expKey(), base=BASES[S.metric].long;
   document.getElementById('chart-title').textContent=`Actual 2026 margin vs. ${base}`;
+  document.getElementById('chart-sub').textContent="Each dot is one candidate, from their own party's point of view. Dots above the diagonal ran ahead of the baseline."+
+    (S.metric==='env'?` The baseline is each seat's PVI lean shifted by this year's national environment, ${ENV_LABEL}.`:'');
   const pts=rows.filter(r=>r[ek]!=null&&r.margin!=null);
   const box=document.getElementById('chart');
   const W=Math.max(320,box.clientWidth), H=Math.round(Math.min(560,Math.max(320,W*.62)));
   const m={l:46,r:14,t:12,b:40};
   const ext=Math.max(20,...pts.map(p=>Math.max(Math.abs(p[ek]),Math.abs(p.margin))));
   const lim=Math.min(100,Math.ceil(ext/10)*10);
-  const x=v=>m.l+(v+lim)/(2*lim)*(W-m.l-m.r), y=v=>m.t+(lim-v)/(2*lim)*(H-m.t-m.b);
-  SCALE={x,y};
-  const ticks=[];for(let v=-lim;v<=lim;v+=lim>=60?20:10)ticks.push(v);
+  if(ZOOM&&ZOOM.half>=lim) ZOOM=null;
+  const half=ZOOM?ZOOM.half:lim, cx=ZOOM?ZOOM.cx:0, cy=ZOOM?ZOOM.cy:0;
+  const pw=W-m.l-m.r, ph=H-m.t-m.b;
+  const x=v=>m.l+(v-cx+half)/(2*half)*pw, y=v=>m.t+(cy+half-v)/(2*half)*ph;
+  VIEW={cx,cy,half,lim,ix:px=>cx-half+(px-m.l)/pw*2*half,iy:py=>cy+half-(py-m.t)/ph*2*half};
+  const step=[1,2,5,10,20].find(t=>2*half/t<=12)||20;
+  const tk=c=>{const a=[];for(let v=Math.ceil((c-half)/step)*step;v<=c+half+1e-9;v+=step)a.push(v);return a;};
+  const tl=v=>fmt(v).replace('.0','');
+  const vis=pts.filter(p=>Math.abs(p[ek]-cx)<=half&&Math.abs(p.margin-cy)<=half);
+  const B=1000, clip='clip-path="url(#plotclip)"';
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter of each candidate's actual margin against the ${base}">`;
+  s+=`<defs><clipPath id="plotclip"><rect x="${m.l}" y="${m.t}" width="${pw}" height="${ph}"/></clipPath></defs>`;
   // over-performance band (above diagonal)
-  s+=`<path d="M${x(-lim)},${y(-lim)}L${x(lim)},${y(lim)}L${x(-lim)},${y(lim)}Z" fill="var(--over-band)"/>`;
-  for(const v of ticks){
+  s+=`<g ${clip}><path d="M${x(-B)},${y(-B)}L${x(B)},${y(B)}L${x(-B)},${y(B)}Z" fill="var(--over-band)"/></g>`;
+  for(const v of tk(cx)){
     s+=`<line x1="${x(v)}" x2="${x(v)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--grid)"/>`;
-    s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/>`;
-    s+=`<text x="${x(v)}" y="${H-m.b+16}" font-size="11" text-anchor="middle" fill="var(--text-muted)">${fmt(v).replace('.0','')}</text>`;
-    s+=`<text x="${m.l-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="var(--text-muted)">${fmt(v).replace('.0','')}</text>`;
+    s+=`<text x="${x(v)}" y="${H-m.b+16}" font-size="11" text-anchor="middle" fill="var(--text-muted)">${tl(v)}</text>`;
   }
-  s+=`<line x1="${x(0)}" x2="${x(0)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--text-muted)" stroke-opacity=".5"/>`;
+  for(const v of tk(cy)){
+    s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/>`;
+    s+=`<text x="${m.l-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="var(--text-muted)">${tl(v)}</text>`;
+  }
+  s+=`<g ${clip}><line x1="${x(0)}" x2="${x(0)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--text-muted)" stroke-opacity=".5"/>`;
   s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(0)}" y2="${y(0)}" stroke="var(--text-muted)" stroke-opacity=".5"/>`;
-  s+=`<line x1="${x(-lim)}" y1="${y(-lim)}" x2="${x(lim)}" y2="${y(lim)}" stroke="var(--text-secondary)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
-  s+=`<text x="${x(-lim)+8}" y="${y(lim)+16}" font-size="12" fill="var(--text-secondary)">▲ Ran ahead of baseline</text>`;
-  s+=`<text x="${x(lim)-8}" y="${y(-lim)-8}" font-size="12" text-anchor="end" fill="var(--text-secondary)">Ran behind ▼</text>`;
+  s+=`<line x1="${x(-B)}" y1="${y(-B)}" x2="${x(B)}" y2="${y(B)}" stroke="var(--text-secondary)" stroke-width="1.5" stroke-dasharray="5 4"/></g>`;
+  s+=`<text x="${m.l+8}" y="${m.t+16}" font-size="12" fill="var(--text-secondary)">▲ Ran ahead of baseline</text>`;
+  s+=`<text x="${W-m.r-8}" y="${H-m.b-8}" font-size="12" text-anchor="end" fill="var(--text-secondary)">Ran behind ▼</text>`;
   s+=`<text x="${(m.l+W-m.r)/2}" y="${H-6}" font-size="12" text-anchor="middle" fill="var(--text-secondary)">${base} (candidate's party view)</text>`;
   s+=`<text transform="translate(12,${(m.t+H-m.b)/2}) rotate(-90)" font-size="12" text-anchor="middle" fill="var(--text-secondary)">Actual 2026 margin</text>`;
   const r=W<520?3.5:4.5;
   const hasHl=set.size>0;
   for(const p of ['I','R','D']){
     s+=`<g fill="${COLOR[p]}" fill-opacity="${hasHl?.16:.78}" stroke="${hasHl?'none':'var(--surface-1)'}" stroke-width="1">`;
-    for(const d of pts) if(d.party===p&&!set.has(d)) s+=SHAPE[p](x(d[ek]),y(d.margin),r);
+    for(const d of vis) if(d.party===p&&!set.has(d)) s+=SHAPE[p](x(d[ek]),y(d.margin),r);
     s+='</g>';
   }
   let unlabeled=0;
   if(hasHl){
-    const hp=pts.filter(d=>set.has(d)).map(d=>({d,px:x(d[ek]),py:y(d.margin)})).sort((a,b)=>a.py-b.py);
+    const hp=vis.filter(d=>set.has(d)).map(d=>({d,px:x(d[ek]),py:y(d.margin)})).sort((a,b)=>a.py-b.py);
     for(const q of hp) s+=`<g fill="${COLOR[q.d.party]}" stroke="var(--text-primary)" stroke-width="1.2">${SHAPE[q.d.party](q.px,q.py,r+1.5)}</g>`;
     // Greedy label placement: nearest free slot around each dot, with a leader line when it has to move away.
     // Captions inside the plot are off limits; on narrow charts labels drop to the last name.
     const pb=hp.map(q=>[q.px-r-3,q.py-r-3,q.px+r+3,q.py+r+3]);
-    const placed=[[x(-lim),y(lim),x(-lim)+175,y(lim)+22],[x(lim)-110,y(-lim)-22,x(lim),y(-lim)]];
+    const placed=[[m.l,m.t,m.l+175,m.t+22],[W-m.r-110,H-m.b-22,W-m.r,H-m.b]];
     const short=n=>W<700?n.split(' ').filter(t=>!/^(Jr|Sr|II|III|IV)\.?$/.test(t)).pop():n;
     const hits=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
     hp.forEach((q,i)=>{
@@ -375,7 +410,7 @@ function renderChart(rows,set){
   s+=`<g id="hl"></g><rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/></svg>`;
   const tip=document.getElementById('tip');
   box.innerHTML=s; box.appendChild(tip);
-  PTS=pts.map(d=>({d,px:x(d[ek]),py:y(d.margin)}));
+  PTS=vis.map(d=>({d,px:x(d[ek]),py:y(d.margin)}));
   const svg=box.querySelector('svg'), hit=box.querySelector('#hit'), hl=box.querySelector('#hl');
   const nearest=e=>{
     const pt=svg.getBoundingClientRect(), sc=W/pt.width;
@@ -390,16 +425,40 @@ function renderChart(rows,set){
     const d=best.d;
     hl.innerHTML=`<g fill="${COLOR[d.party]}" stroke="var(--text-primary)" stroke-width="2">${SHAPE[d.party](best.px,best.py,r+2.5)}</g>`;
     tip.innerHTML=`<b>${esc(d.name)}</b> <span class="muted">(${d.partyLabel})</span><div class="muted" style="margin-bottom:4px">${d.race} · ${d.won?'Won':'Lost'}${d.called?'':' · not called'}</div>
-      <div class="row"><span>${S.metric==='pvi'?'PVI ('+d.pvi+') implies':'2024 margin'}</span><span>${fmt(d[ek])}</span></div>
+      <div class="row"><span>${S.metric==='env'?'PVI ('+d.pvi+') + '+ENV_LABEL:S.metric==='pvi'?'PVI ('+d.pvi+') implies':'2024 margin'}</span><span>${fmt(d[ek])}</span></div>
       <div class="row"><span>2026 margin</span><span>${fmt(d.margin)}</span></div>
       <div class="row"><span><b>Over/under</b></span><span><b>${fmt(d[vsKey()])}</b></span></div>${typeof d.pick==='string'?`<div style="margin-top:4px;max-width:230px">${esc(d.pick)}</div>`:''}`;
     const bw=box.clientWidth, tx=best.px/sc, ty=best.py/sc;
     tip.style.left=Math.min(bw-210,Math.max(0,tx+12))+'px';
     tip.style.top=Math.max(0,ty-90)+'px'; tip.style.opacity=1;
   };
-  hit.addEventListener('pointermove',move); hit.addEventListener('pointerdown',move);
+  // Mouse or pen: drag a box to zoom into it. Touch keeps tap-to-inspect and uses the zoom buttons.
+  let drag=null;
+  hit.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='touch'||e.button!==0){move(e);return;}
+    const pt=svg.getBoundingClientRect(), sc=W/pt.width;
+    drag={x:(e.clientX-pt.left)*sc,y:(e.clientY-pt.top)*sc,sc,pt,on:false};
+    hit.setPointerCapture(e.pointerId);
+  });
+  hit.addEventListener('pointermove',e=>{
+    if(!drag){move(e);return;}
+    drag.x2=Math.min(W-m.r,Math.max(m.l,(e.clientX-drag.pt.left)*drag.sc));
+    drag.y2=Math.min(H-m.b,Math.max(m.t,(e.clientY-drag.pt.top)*drag.sc));
+    if(Math.abs(drag.x2-drag.x)>6&&Math.abs(drag.y2-drag.y)>6){
+      drag.on=true; tip.style.opacity=0;
+      hl.innerHTML=`<rect x="${Math.min(drag.x,drag.x2)}" y="${Math.min(drag.y,drag.y2)}" width="${Math.abs(drag.x2-drag.x)}" height="${Math.abs(drag.y2-drag.y)}" fill="var(--accent)" fill-opacity=".12" stroke="var(--accent)"/>`;
+    }
+  });
+  hit.addEventListener('pointerup',()=>{
+    const d=drag; drag=null;
+    if(!d||!d.on) return;
+    const x0=VIEW.ix(d.x), x1=VIEW.ix(d.x2), y0=VIEW.iy(d.y), y1=VIEW.iy(d.y2);
+    ZOOM={cx:(x0+x1)/2, cy:(y0+y1)/2, half:Math.max(2,Math.abs(x1-x0)/2,Math.abs(y1-y0)/2)};
+    NO_CLICK_UNTIL=performance.now()+400; render();
+  });
   hit.addEventListener('pointerleave',()=>{tip.style.opacity=0;hl.innerHTML='';});
   hit.addEventListener('click',e=>{
+    if(performance.now()<NO_CLICK_UNTIL) return;
     const [best]=nearest(e); if(!best) return;
     const k=pinKey(best.d); PINS.has(k)?PINS.delete(k):PINS.add(k); render();
   });
@@ -407,11 +466,13 @@ function renderChart(rows,set){
   document.getElementById('hl-note').textContent =
     (S.hl==='none' ? '' : HL_DESC[S.hl]+' ') + (nPin ? `${nPin} pinned by hand. ` : '') +
     (unlabeled ? `${unlabeled} highlighted ${unlabeled===1?'dot has':'dots have'} no room for a label; hover to identify. ` : '') +
-    'Click any dot to pin or unpin its name.';
+    'Click any dot to pin or unpin its name. Drag across the chart to zoom into an area.';
+  document.getElementById('zout').disabled = document.getElementById('zreset').disabled = !ZOOM;
   document.getElementById('unpin').hidden = PINS.size===0;
   document.getElementById('only').disabled = !hasHl;
   const missing=rows.length-pts.length;
-  document.getElementById('chart-note').textContent = missing>0 ? `${missing} of the ${rows.length} filtered candidates aren't plotted because they have no ${S.metric==='pvi'?'D-vs-R comparison':'2024 baseline (redrawn district, same-party race or missing data)'}.` : '';
+  document.getElementById('chart-note').textContent = missing>0 ? `${missing} of the ${rows.length} filtered candidates aren't plotted because they have no ${S.metric!=='2024'?'D-vs-R comparison':'2024 baseline (redrawn district, same-party race or missing data)'}.` : '';
+  if(pts.length>vis.length) document.getElementById('chart-note').textContent += ` ${pts.length-vis.length} plotted candidates are outside the zoomed view.`;
 }
 
 /* ---------- legend ---------- */
@@ -430,7 +491,7 @@ function val(r,k){ if(k==='exp')return r[expKey()]; if(k==='vs')return r[vsKey()
 function renderTable(rows){
   const k=sortKey||'vs';
   rows=[...rows].sort((a,b)=>{const va=val(a,k),vb=val(b,k);if(va==null&&vb==null)return 0;if(va==null)return 1;if(vb==null)return -1;return (va>vb?1:va<vb?-1:0)*sortDir;});
-  const base=S.metric==='pvi'?'PVI-implied':'2024 margin';
+  const base=BASES[S.metric].tbl;
   document.querySelector('#tbl thead').innerHTML='<tr>'+COLS.map(([c,l,n])=>`<th class="${n?'num':''}" data-k="${c}" aria-sort="${k===c?(sortDir>0?'ascending':'descending'):'none'}" tabindex="0">${c==='exp'?base:l}</th>`).join('')+'</tr>';
   document.querySelectorAll('#tbl th').forEach(th=>{const go=()=>{const c=th.dataset.k;if(sortKey===c||(!sortKey&&c==='vs'))sortDir*=-1;else{sortKey=c;sortDir=['name','race','partyLabel','body','inc'].includes(c)?1:-1;}render();};th.onclick=go;th.onkeydown=e=>{if(e.key==='Enter')go();};});
   const maxAbs=Math.max(1,...rows.map(r=>Math.abs(r[vsKey()]||0)));
@@ -446,8 +507,8 @@ function renderTable(rows){
 }
 let LAST=[];
 function csvText(){
-  const hdr=['candidate','party','race','body','state','incumbency','pvi','pvi_implied_margin','pres2024_margin','margin_2026','vs_pvi','vs_2024','share','votes','won','called'];
-  const lines=[hdr.join(',')].concat(LAST.map(r=>[r.name,r.partyLabel,r.race,r.body,r.state,r.inc,r.pvi,r.expPvi,r.exp24,r.margin,r.vsPvi,r.vs24,r.share,r.votes,r.won,r.called].map(v=>v==null?'':/[",]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:v).join(',')));
+  const hdr=['candidate','party','race','body','state','incumbency','pvi','pvi_implied_margin','pres2024_margin','margin_2026','vs_pvi','vs_2024','share','votes','won','called','pvi_plus_env_baseline','vs_pvi_plus_env'];
+  const lines=[hdr.join(',')].concat(LAST.map(r=>[r.name,r.partyLabel,r.race,r.body,r.state,r.inc,r.pvi,r.expPvi,r.exp24,r.margin,r.vsPvi,r.vs24,r.share,r.votes,r.won,r.called,r.expEnv,r.vsEnv].map(v=>v==null?'':/[",]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:v).join(',')));
   return lines.join('\n');
 }
 document.getElementById('csv').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csvText()],{type:'text/csv'}));a.download='2026_candidates_vs_pvi.csv';a.click();};
