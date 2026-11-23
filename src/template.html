@@ -192,10 +192,10 @@ for (const r of DATA.races) {
 }
 
 /* ---------- state ---------- */
-const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'pvi', q:'', hl:'none', only:false});
+const HAS_PICKS = ROWS.some(r=>r.pick);
+const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'pvi', q:'', hl:HAS_PICKS?'picks':'none', only:false});
 let S = fresh();
 const PINS = new Set();
-const HAS_PICKS = ROWS.some(r=>r.pick);
 const pinKey = r => r.name+'|'+r.race;
 let sortKey = null, sortDir = -1;
 
