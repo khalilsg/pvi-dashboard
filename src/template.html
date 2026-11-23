@@ -186,7 +186,7 @@ for (const r of DATA.races) {
       margin:c.margin,
       expPvi: (r.pvi_num==null||c.margin==null) ? null : +(2*r.pvi_num*(c.side==='D'?1:-1)).toFixed(1),
       exp24: (r.pres24_margin==null||c.margin==null) ? null : +(r.pres24_margin*(c.side==='D'?1:-1)).toFixed(1),
-      vsPvi:c.vs_pvi, vs24:c.vs_2024, redrawn:r.redrawn, note:r.note, certified:r.certified
+      vsPvi:c.vs_pvi, vs24:c.vs_2024, redrawn:r.redrawn, note:r.note, certified:r.certified, pick:c.pick
     });
   }
 }
@@ -195,6 +195,7 @@ for (const r of DATA.races) {
 const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'pvi', q:'', hl:'none', only:false});
 let S = fresh();
 const PINS = new Set();
+const HAS_PICKS = ROWS.some(r=>r.pick);
 const pinKey = r => r.name+'|'+r.race;
 let sortKey = null, sortDir = -1;
 
@@ -227,7 +228,7 @@ function renderControls(){
   mseg('f-body','body',[['Senate','Senate'],['Governor','Governor'],['House','House']]);
   mseg('f-party','party',[['D','Dem'],['R','Rep'],['I','Ind/Other']]);
   mseg('f-inc','inc',[['Incumbent','Incumbents'],['Challenger','Challengers'],['Open seat','Open seats']]);
-  seg('f-hl','hl',[['none','Off'],['standouts','Standouts'],['flips','Won against the lean'],['close','Closest wins']]);
+  seg('f-hl','hl',[['none','Off'],...(HAS_PICKS?[['picks','Curated']]:[]),['standouts','Standouts'],['flips','Won against the lean'],['close','Closest wins']]);
   document.getElementById('only').setAttribute('aria-pressed', S.only);
   seg('f-res','res',[['All','All'],['won','Won'],['lost','Lost']]);
   seg('f-call','call',[['All','All'],['called','Called'],['uncalled','Not called'],['certified','Certified']]);
@@ -261,6 +262,7 @@ const COLOR={D:'var(--dem)',R:'var(--rep)',I:'var(--ind)'};
 
 /* ---------- highlight set ---------- */
 const HL_DESC={
+  picks:'A hand-picked set of candidates worth a look.',
   standouts:'The six biggest over- and underperformers among the candidates shown.',
   flips:'Winners on ground that leaned against their party, up to the 12 most hostile.',
   close:'The 12 narrowest wins among the candidates shown.'
@@ -269,7 +271,9 @@ function hlSet(rows){
   const ek=expKey(), k=vsKey();
   const pts=rows.filter(r=>r[ek]!=null&&r.margin!=null);
   let pick=[];
-  if(S.hl==='standouts'){
+  if(S.hl==='picks'){
+    pick=pts.filter(r=>r.pick);
+  } else if(S.hl==='standouts'){
     const by=pts.filter(r=>r[k]!=null).sort((a,b)=>b[k]-a[k]);
     pick=by.length<=12?by:[...by.slice(0,6),...by.slice(-6)];
   } else if(S.hl==='flips'){
@@ -379,7 +383,7 @@ function renderChart(rows,set){
     tip.innerHTML=`<b>${esc(d.name)}</b> <span class="muted">(${d.partyLabel})</span><div class="muted" style="margin-bottom:4px">${d.race} · ${d.won?'Won':'Lost'}${d.called?'':' · not called'}</div>
       <div class="row"><span>${S.metric==='pvi'?'PVI ('+d.pvi+') implies':'2024 margin'}</span><span>${fmt(d[ek])}</span></div>
       <div class="row"><span>2026 margin</span><span>${fmt(d.margin)}</span></div>
-      <div class="row"><span><b>Over/under</b></span><span><b>${fmt(d[vsKey()])}</b></span></div>`;
+      <div class="row"><span><b>Over/under</b></span><span><b>${fmt(d[vsKey()])}</b></span></div>${typeof d.pick==='string'?`<div style="margin-top:4px;max-width:230px">${esc(d.pick)}</div>`:''}`;
     const bw=box.clientWidth, tx=best.px/sc, ty=best.py/sc;
     tip.style.left=Math.min(bw-210,Math.max(0,tx+12))+'px';
     tip.style.top=Math.max(0,ty-90)+'px'; tip.style.opacity=1;

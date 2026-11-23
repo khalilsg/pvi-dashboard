@@ -216,12 +216,29 @@ def main():
                               "pres24_margin_d": m24, "called": race["called"], **{k: v for k, v in row.items()}})
         races.append(race)
 
+    # --- curated highlights (data/overrides/highlights.csv) ---
+    # columns: race,candidate,note   e.g.  PA-07,Bob Brooks,Flipped a Trump district
+    hpath = os.path.join(ROOT, "data", "overrides", "highlights.csv")
+    picked = 0
+    if os.path.exists(hpath):
+        by_label = {r["label"]: r for r in races}
+        for h in csv.DictReader(l for l in open(hpath, encoding="utf-8") if not l.lstrip().startswith("#")):
+            label, who = (h.get("race") or "").strip(), (h.get("candidate") or "").strip()
+            if not label or not who:
+                continue
+            match = [c for c in by_label.get(label, {}).get("cands", []) if c["side"] and same_person(c["name"], who)]
+            if len(match) != 1:
+                print(f"WARNING: highlights.csv row not matched: {label}, {who}")
+                continue
+            match[0]["pick"] = (h.get("note") or "").strip() or True
+            picked += 1
+
     out = dict(updated_results=results["updated"], races=races)
     json.dump(out, open(os.path.join(ROOT, "data", "races.json"), "w"), separators=(",", ":"))
     with open(os.path.join(ROOT, "data", "candidates.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(cands_out[0].keys()))
         w.writeheader(); w.writerows(cands_out)
-    print(f"{len(races)} races, {len(cands_out)} candidate rows; results as of {results['updated']}")
+    print(f"{len(races)} races, {len(cands_out)} candidate rows; {picked} curated; results as of {results['updated']}")
 
 
 if __name__ == "__main__":

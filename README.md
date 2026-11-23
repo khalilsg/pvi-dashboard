@@ -17,6 +17,7 @@ scripts/build_site.py            data/races.json + template + version -> index.h
 scripts/update.sh                pull the latest results, then run both builds
 data/raw/                        source snapshots (see Sources)
 data/overrides/certified_results.csv   hand-entered certified totals (take priority)
+data/overrides/highlights.csv          hand-picked candidates for the "Curated" highlight
 .github/workflows/update.yml     daily refresh + rebuild on override edits
 ```
 
@@ -28,6 +29,9 @@ data/overrides/certified_results.csv   hand-entered certified totals (take prior
 - **Certified results:** add rows to `data/overrides/certified_results.csv`
   (`race,candidate,party,votes,source`, one row per candidate, e.g. `PA-07,Bob Brooks,Democratic,201234,PA DOS 2026-11-30`).
   All rows for a race replace that race's numbers and mark it "Certified". Pushing an edit triggers a rebuild.
+- **Curated highlights:** add rows to `data/overrides/highlights.csv` (`race,candidate,note`, e.g.
+  `PA-07,Bob Brooks,Flipped a Trump district`). They become the chart's "Curated" highlight set, and the note
+  shows in the hover card. The option stays hidden while the file has no rows. Pushing an edit triggers a rebuild.
 
 ## Versioning
 

@@ -1,0 +1,4 @@
+# Curated candidates for the chart's "Curated" highlight. One row per candidate.
+# race uses the dashboard label: "PA-07", "AK-AL", "GA Senate", "OH Senate (special)", "AZ Governor".
+# candidate: the name as shown in the table. note (optional): one line on why, shown in the hover card.
+race,candidate,note
