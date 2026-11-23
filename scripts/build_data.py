@@ -29,6 +29,11 @@ ABBR = {"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California"
 REDRAWN = {"AL","CA","FL","LA","NC","OH","TN","TX","UT"}
 
 
+# States where more than one candidate from a party can appear on the November ballot
+# (Louisiana's all-candidate ballot, Alaska's top-four ranked-choice general).
+SPLIT_BALLOT = {"LA", "AK"}
+
+
 def load_js(name):
     s = open(os.path.join(RAW, name), encoding="utf-8").read()
     return json.loads(s[s.index("{"): s.rstrip().rstrip(";").rindex("}") + 1])
@@ -148,7 +153,7 @@ def main():
             rows = overrides[label]
             r = dict(r, cands=[{"name": o["candidate"].strip(), "party": o.get("party", "").strip(),
                                 "votes": int(float(o["votes"].replace(",", "")))} for o in rows],
-                     called=True, pctIn=100)
+                     called=True, pctIn=100, votes=None)
             top = max(r["cands"], key=lambda c: c["votes"])
             r["winner"], r["winnerParty"] = top["name"], top["party"]
             certified_src = "; ".join(sorted({o.get("source", "").strip() for o in rows if o.get("source")})) or "certified"
@@ -162,7 +167,11 @@ def main():
         pv = pvi_num(pvi)
 
         cs = sorted(r["cands"], key=lambda c: -(c.get("votes") or 0))
-        total = sum(c.get("votes") or 0 for c in cs) or None
+        # The tracker lists only each race's top two candidates but reports the full vote count,
+        # so shares and margins use the full count, not the listed candidates' sum.
+        listed = sum(c.get("votes") or 0 for c in cs)
+        total = max(listed, r.get("votes") or 0) or None
+        unlisted = round(100 * (1 - listed / total), 1) if total else 0
         topD = next((c for c in cs if side_of(c["party"]) == "D"), None)
         topR = next((c for c in cs if side_of(c["party"]) == "R"), None)
         note = ""
@@ -183,7 +192,14 @@ def main():
                 note = f"No major-party opponent ({sub['name']}, {sub['party']}, under 30%); no D-vs-R comparison"
                 if note and sub is topD: topD = None
                 else: topR = None
-        contested = bool(topD and topR and total)
+        # Where several candidates of one party can share the ballot, a large unlisted vote means the
+        # top Democrat vs. top Republican margin is not the party-vs-party margin.
+        split = False
+        if topD and topR and st in SPLIT_BALLOT and unlisted >= 10:
+            note = (f"{unlisted:.0f}% of the vote went to candidates the source doesn't list, and this state "
+                    "lets several candidates from one party share the ballot; no D-vs-R comparison")
+            split = True
+        contested = bool(topD and topR and total) and not split
         if not contested:
             note = note or ("Same-party or uncontested race; no D-vs-R comparison" if cs else "No results")
 

@@ -49,6 +49,9 @@ run `python3 scripts/build_site.py`, and commit both. The automatic data refresh
 ## Method
 
 - **Margin** = candidate share − main opponent share (% of all votes), from the candidate's point of view.
+  The tracker lists only each race's top two candidates, so shares use the race's full vote count.
+  Louisiana and Alaska can put several candidates from one party on the November ballot; races there with
+  more than 10% of the vote unlisted get no comparison (`SPLIT_BALLOT` in `scripts/build_data.py`).
 - **PVI-implied margin** = 2 × PVI in the candidate's party's direction (D+5 → D +10 / R −10). It assumes a
   neutral national environment, so in a wave year compare candidates with each other, not with zero.
 - **National environment** = the median amount by which Democrats ran ahead of their PVI-implied margin across
