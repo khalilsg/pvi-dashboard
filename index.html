@@ -263,7 +263,7 @@ const COLOR={D:'var(--dem)',R:'var(--rep)',I:'var(--ind)'};
 /* ---------- highlight set ---------- */
 const HL_DESC={
   picks:'A hand-picked set of candidates worth a look.',
-  standouts:'The six biggest over- and underperformers among the candidates shown.',
+  standouts:'The 12 biggest overperformers among the candidates shown.',
   flips:'Winners on ground that leaned against their party, up to the 12 most hostile.',
   close:'The 12 narrowest wins among the candidates shown.'
 };
@@ -274,8 +274,7 @@ function hlSet(rows){
   if(S.hl==='picks'){
     pick=pts.filter(r=>r.pick);
   } else if(S.hl==='standouts'){
-    const by=pts.filter(r=>r[k]!=null).sort((a,b)=>b[k]-a[k]);
-    pick=by.length<=12?by:[...by.slice(0,6),...by.slice(-6)];
+    pick=pts.filter(r=>r[k]>0).sort((a,b)=>b[k]-a[k]).slice(0,12);
   } else if(S.hl==='flips'){
     pick=pts.filter(r=>r.won&&r[ek]<0).sort((a,b)=>a[ek]-b[ek]).slice(0,12);
   } else if(S.hl==='close'){
