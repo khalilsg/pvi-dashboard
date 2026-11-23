@@ -2,3 +2,21 @@
 # race uses the dashboard label: "PA-07", "AK-AL", "GA Senate", "OH Senate (special)", "AZ Governor".
 # candidate: the name as shown in the table. note (optional): one line on why, shown in the hover card.
 race,candidate,note
+MI Senate,Abdul El-Sayed,Won an open seat in an evenly split state by 7; ahead of the lean but less than the typical Democrat
+GA Senate,Jon Ossoff,Incumbent who won an R+1 state by 18
+NY-14,Alexandria Ocasio-Cortez,Won a D+19 seat by 57; 19 points ahead of its lean
+VT Governor,Phil Scott,Republican who won a D+17 state by 7; 41 points ahead of its lean
+NH Governor,Kelly Ayotte,One of only two Republicans to win on Democratic-leaning ground
+FL-27,Maria Elvira Salazar,Ran 12 points behind an R+6 seat and survived by 0.4
+AK Governor,Jonathan Kreiss-Tomkins,Won an R+6 state by 29; the biggest statewide overperformance
+PA Governor,Josh Shapiro,Incumbent who won an R+1 state by 23
+MS Senate,Scott Colom,Won an R+11 state by 0.8; the most hostile ground any Democrat won
+TX Senate,James Talarico,Won an R+6 state by 12; the top Senate overperformer
+NC Senate,Roy Cooper,Won an R+1 state by 20
+KS Senate,Adam Hamilton,Beat an incumbent in an R+8 state by 6
+AL Governor,Doug Jones,Lost an R+15 state by only 4
+OK Governor,Cyndi Munson,Lost an R+17 state by 6; the biggest overperformance in a statewide loss
+TX-28,Henry Cuellar,Largest overperformance on the board: won an R+3 seat by 38
+TX-15,Bobby Pulido,Beat an incumbent by 25 in an R+7 seat
+CO-04,Eileen Laubacher,Beat an incumbent in an R+9 seat by 0.9
+KY-06,Zach Dembo,Won an open R+7 seat by 10

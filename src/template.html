@@ -40,7 +40,7 @@ h1{font-size:clamp(20px,3.2vw,28px);margin:0 0 4px;letter-spacing:-.01em}
 @media (min-width:900px){.filters{position:sticky;top:0;z-index:5}}
 .f{display:flex;flex-direction:column;gap:4px;min-width:0}
 .f label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)}
-.seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.seg{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .seg button{all:unset;cursor:pointer;padding:6px 10px;font-size:13px;color:var(--text-secondary);border-right:1px solid var(--border);white-space:nowrap}
 .seg button:last-child{border-right:0}
 .seg button[aria-pressed="true"]{background:var(--text-primary);color:var(--surface-1)}
@@ -345,18 +345,28 @@ function renderChart(rows,set){
     const hp=pts.filter(d=>set.has(d)).map(d=>({d,px:x(d[ek]),py:y(d.margin)})).sort((a,b)=>a.py-b.py);
     for(const q of hp) s+=`<g fill="${COLOR[q.d.party]}" stroke="var(--text-primary)" stroke-width="1.2">${SHAPE[q.d.party](q.px,q.py,r+1.5)}</g>`;
     // Greedy label placement: nearest free slot around each dot, with a leader line when it has to move away.
-    const pb=hp.map(q=>[q.px-r-3,q.py-r-3,q.px+r+3,q.py+r+3]), placed=[];
+    // Captions inside the plot are off limits; on narrow charts labels drop to the last name.
+    const pb=hp.map(q=>[q.px-r-3,q.py-r-3,q.px+r+3,q.py+r+3]);
+    const placed=[[x(-lim),y(lim),x(-lim)+175,y(lim)+22],[x(lim)-110,y(-lim)-22,x(lim),y(-lim)]];
+    const short=n=>W<700?n.split(' ').filter(t=>!/^(Jr|Sr|II|III|IV)\.?$/.test(t)).pop():n;
     const hits=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
     hp.forEach((q,i)=>{
-      const w=q.d.name.length*6.5+q.d.race.length*5.8+10;
-      for(const dist of [5,20,38,58,80]) for(const [ux,uy] of [[1,0],[-1,0],[.7,-.7],[-.7,-.7],[.7,.7],[-.7,.7],[0,-1],[0,1]]){
+      const nm=short(q.d.name), w=nm.length*6.5+q.d.race.length*5.8+10;
+      for(const dist of [5,14,24,36,50,66]) for(const [ux,uy] of [[1,0],[-1,0],[.7,-.7],[-.7,-.7],[.7,.7],[-.7,.7],[0,-1],[0,1],[.92,-.38],[-.92,-.38],[.92,.38],[-.92,.38]]){
         const ax=q.px+ux*(dist+r+2), ay=q.py+uy*(dist+r+2);
         const x0=ux>0?ax:ux<0?ax-w:ax-w/2, bx=[x0,ay-9,x0+w,ay+7];
         if(x0<m.l+2||x0+w>W-m.r-2||bx[1]<m.t||bx[3]>H-m.b) continue;
         if(placed.some(b=>hits(bx,b))||pb.some((b,j)=>j!==i&&hits(bx,b))) continue;
+        // A leader line must not run through another highlighted dot or an existing label.
+        let blocked=false;
+        for(let t=r+4;t<dist+r&&!blocked;t+=3){
+          const lx=q.px+ux*t, ly=q.py+uy*t, pt=[lx-1,ly-1,lx+1,ly+1];
+          blocked=pb.some((b,j)=>j!==i&&hits(pt,b))||placed.some(b=>hits(pt,b));
+        }
+        if(blocked) continue;
         placed.push(bx);
         if(dist>5) s+=`<line x1="${q.px+ux*(r+2)}" y1="${q.py+uy*(r+2)}" x2="${ax-ux*2}" y2="${ay-uy*2}" stroke="var(--text-muted)"/>`;
-        s+=`<text x="${ax}" y="${ay+4}" text-anchor="${ux>0?'start':ux<0?'end':'middle'}" font-size="11" font-weight="600" fill="var(--text-primary)" stroke="var(--surface-1)" stroke-width="3" paint-order="stroke" stroke-linejoin="round">${esc(q.d.name)} <tspan font-weight="400" fill="var(--text-secondary)">${esc(q.d.race)}</tspan></text>`;
+        s+=`<text x="${ax}" y="${ay+4}" text-anchor="${ux>0?'start':ux<0?'end':'middle'}" font-size="11" font-weight="600" fill="var(--text-primary)" stroke="var(--surface-1)" stroke-width="3" paint-order="stroke" stroke-linejoin="round">${esc(nm)} <tspan font-weight="400" fill="var(--text-secondary)">${esc(q.d.race)}</tspan></text>`;
         return;
       }
       unlabeled++;
