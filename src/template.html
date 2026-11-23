@@ -60,7 +60,9 @@ input[type=search]{width:170px}
 .legend span{display:inline-flex;align-items:center;gap:5px}
 #chart{position:relative;margin-top:8px}
 #chart svg,#strip svg{display:block;width:100%;height:auto;touch-action:pan-y}
-#strip{position:relative;margin-top:8px}
+#strip,#map{position:relative;margin-top:8px}
+#map svg{display:block;width:100%;height:auto;max-height:620px}
+#map [data-s]{cursor:pointer}
 .tip{position:absolute;pointer-events:none;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);min-width:190px;opacity:0;transition:opacity .08s}
 .tip b{font-size:13px}
 .tip .row{display:flex;justify-content:space-between;gap:12px;color:var(--text-secondary)}
@@ -142,6 +144,16 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
 
   <div class="card" style="margin-top:14px">
     <div class="chart-head">
+      <div><h2 id="map-title">By state</h2><p id="map-sub"></p></div>
+      <div class="f"><label>Color by</label><div class="seg" id="f-map"></div></div>
+    </div>
+    <div id="map"><div class="tip" id="tip3" role="status"></div></div>
+    <div class="legend" id="map-legend" style="margin-top:6px"></div>
+    <p class="note" id="map-note"></p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="chart-head">
       <div><h2>Candidate table</h2><p id="tbl-sub">Sorted by over/underperformance. Click a column header to sort.</p></div>
       <div style="display:flex;gap:8px"><button class="btn" id="copy">Copy CSV</button><button class="btn" id="csv">Download CSV</button></div>
     </div>
@@ -183,6 +195,7 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
 
 <script>
 const DATA = /*__DATA__*/null;
+const MAP = /*__MAP__*/null;
 
 /* ---------- flatten to candidate rows ---------- */
 const PARTY = p => { p=(p||'').toLowerCase(); return p.startsWith('dem')?'D':p.startsWith('rep')?'R':'I'; };
@@ -222,7 +235,7 @@ const BASES = {
 
 /* ---------- state ---------- */
 const HAS_PICKS = ROWS.some(r=>r.pick);
-const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'env', q:'', hl:HAS_PICKS?'picks':'none', only:false});
+const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'env', q:'', hl:HAS_PICKS?'picks':'none', only:false, map:'vs'});
 let S = fresh();
 const PINS = new Set();
 const pinKey = r => r.name+'|'+r.race;
@@ -258,6 +271,7 @@ function renderControls(){
   mseg('f-party','party',[['D','Dem'],['R','Rep'],['I','Ind/Other']]);
   mseg('f-inc','inc',[['Incumbent','Incumbents'],['Challenger','Challengers'],['Open seat','Open seats']]);
   seg('f-hl','hl',[['none','Off'],...(HAS_PICKS?[['picks','Curated']]:[]),['standouts','Standouts'],['flips','Won against the lean'],['close','Closest wins']]);
+  seg('f-map','map',[['vs','Over/under vs. baseline'],['actual','Actual result'],['share','Share of races ahead']]);
   document.getElementById('only').setAttribute('aria-pressed', S.only);
   seg('f-res','res',[['All','All'],['won','Won'],['lost','Lost']]);
   seg('f-call','call',[['All','All'],['called','Called'],['uncalled','Not called'],['certified','Certified']]);
@@ -278,11 +292,11 @@ document.getElementById('reset').onclick=()=>{S=fresh();PINS.clear();ZOOM=null;s
 document.getElementById('env').textContent=ENV_LABEL;
 document.getElementById('asof').textContent=new Date(DATA.updated_results).toUTCString().replace(':00 GMT',' UTC');
 
-function filtered(){
+function filtered(skipState){
   const q=S.q.trim().toLowerCase();
   return ROWS.filter(r=>
     (!S.body.size||S.body.has(r.body)) && (!S.party.size||S.party.has(r.party)) &&
-    (S.state==='All'||r.state===S.state) && (!S.inc.size||S.inc.has(r.inc)) &&
+    (skipState||S.state==='All'||r.state===S.state) && (!S.inc.size||S.inc.has(r.inc)) &&
     (S.res==='All'||(S.res==='won')===r.won) && (S.call==='All'||(S.call==='certified'?!!r.certified:(S.call==='called')===r.called)) &&
     (!q || r.name.toLowerCase().includes(q) || r.race.toLowerCase().includes(q)));
 }
@@ -580,6 +594,79 @@ function renderStrip(rows,set){
     (unlabeled?`${unlabeled} highlighted ${unlabeled===1?'dot has':'dots have'} no room for a label; hover to identify.`:'');
 }
 
+/* ---------- state map ---------- */
+// One value per race, from the Democratic side's point of view, so a state reads the same whichever party is filtered.
+const CHIPS=['VT','NH','MA','RI','CT','NJ','DE','MD'];
+function renderMap(rows){
+  const k=vsKey(), box=document.getElementById('map'), tip=document.getElementById('tip3');
+  const races=new Map();
+  for(const r of rows){const c=races.get(r.race); if(!c||(r.side==='D'&&c.side!=='D')) races.set(r.race,r);}
+  const by={};
+  for(const r of races.values()){
+    const sg=r.side==='D'?1:-1, o=by[r.state]||(by[r.state]={vs:[],m:[]});
+    if(r[k]!=null) o.vs.push(sg*r[k]);
+    if(r.margin!=null) o.m.push(sg*r.margin);
+  }
+  const stat=a=>{
+    const o=by[a]; if(!o) return null;
+    const arr=S.map==='actual'?o.m:o.vs; if(!arr.length) return null;
+    const ahead=arr.filter(v=>v>0).length;
+    const v=S.map==='share'?100*ahead/arr.length:median(arr);
+    const t=S.map==='vs'?v/10:S.map==='actual'?v/30:(v-50)/50;
+    return {v,n:arr.length,ahead,t:Math.max(-1,Math.min(1,t))};
+  };
+  const fill=t=>`color-mix(in srgb, var(${t>=0?'--dem':'--rep'}) ${Math.round(Math.abs(t)*100)}%, var(--neutral-mid))`;
+  const paint=a=>{const st=stat(a); return st?fill(st.t):'var(--surface-1)';};
+  const edge=a=>a===S.state?'stroke="var(--text-primary)" stroke-width="2.5"':stat(a)?'stroke="var(--surface-1)" stroke-width="1"':'stroke="var(--border)" stroke-width="1" stroke-dasharray="2 2"';
+  let s=`<svg viewBox="0 0 975 610" role="img" aria-label="Map of US states shaded by ${S.map==='actual'?'the median actual margin':S.map==='share'?'the share of races where the Democrat ran ahead of the baseline':'the median over or underperformance against the baseline'}">`;
+  const order=Object.keys(MAP).sort((a,b)=>(a===S.state)-(b===S.state));
+  for(const a of order) s+=`<path data-s="${a}" d="${MAP[a].d}" fill="${paint(a)}" ${edge(a)} stroke-linejoin="round"/>`;
+  CHIPS.forEach((a,i)=>{
+    const y=196+i*24;
+    s+=`<g data-s="${a}"><rect x="905" y="${y}" width="46" height="19" rx="4" fill="${paint(a)}" ${a===S.state?'stroke="var(--text-primary)" stroke-width="2"':'stroke="var(--border)"'}/>`+
+       `<text x="928" y="${y+13.5}" font-size="11" text-anchor="middle" fill="var(--text-primary)" stroke="var(--surface-1)" stroke-width="2.5" paint-order="stroke" stroke-linejoin="round">${a}</text></g>`;
+  });
+  s+='</svg>';
+  box.innerHTML=s; box.appendChild(tip);
+  const svg=box.querySelector('svg');
+  const base=BASES[S.metric].long;
+  const lead=v=>v>0?`Democrats ${fmt(v)}`:v<0?`Republicans ${fmt(-v)}`:'Even';
+  svg.addEventListener('pointermove',e=>{
+    const el=e.target.closest('[data-s]'); if(!el){tip.style.opacity=0;return;}
+    const a=el.dataset.s, st=stat(a), o=by[a];
+    let h=`<b>${MAP[a].n}</b>`;
+    if(!st) h+=`<div class="muted">No races with a comparison in this filter</div>`;
+    else{
+      const vs=o.vs.length?median(o.vs):null, m=o.m.length?median(o.m):null, up=o.vs.filter(v=>v>0).length;
+      h+=`<div class="muted" style="margin-bottom:4px">${st.n} ${st.n===1?'race':'races'}</div>`;
+      if(vs!=null) h+=`<div class="row"><span>Median vs. baseline</span><span>${lead(vs)}</span></div><div class="row"><span>Democrat ran ahead in</span><span>${up} of ${o.vs.length}</span></div>`;
+      if(m!=null) h+=`<div class="row"><span>Median actual margin</span><span>${lead(m)}</span></div>`;
+    }
+    h+=`<div class="muted" style="margin-top:4px">Click to ${a===S.state?'clear the state filter':'filter to this state'}</div>`;
+    tip.innerHTML=h;
+    const pt=box.getBoundingClientRect();
+    tip.style.left=Math.min(box.clientWidth-215,Math.max(0,e.clientX-pt.left+14))+'px';
+    tip.style.top=Math.max(0,e.clientY-pt.top-70)+'px'; tip.style.opacity=1;
+  });
+  svg.addEventListener('pointerleave',()=>{tip.style.opacity=0;});
+  svg.addEventListener('click',e=>{
+    const el=e.target.closest('[data-s]'); if(!el) return;
+    S.state=S.state===el.dataset.s?'All':el.dataset.s; renderControls(); render();
+  });
+  document.getElementById('map-title').textContent=
+    S.map==='actual'?'By state: actual 2026 margin':S.map==='share'?`By state: share of races ahead of ${BASES[S.metric].short}`:`By state: over/under vs. ${base}`;
+  document.getElementById('map-sub').textContent=
+    (S.map==='actual'?"Each state is shaded by its median race's actual margin, among the candidates shown."
+     :S.map==='share'?'Each state is shaded by the share of its races where the Democratic side ran ahead of the baseline.'
+     :"Each state is shaded by its median race's distance from the baseline, among the candidates shown.")+' Click a state to filter the page to it.';
+  const ends=S.map==='vs'?['Republicans +10 or more','Democrats +10 or more']:S.map==='actual'?['Republicans +30 or more','Democrats +30 or more']:['Democrat ahead in none','Democrat ahead in all'];
+  document.getElementById('map-legend').innerHTML=`<span>${ends[0]}</span><span style="gap:2px">`+
+    [-1,-.5,0,.5,1].map(t=>`<span style="width:26px;height:10px;border-radius:2px;background:${fill(t)}"></span>`).join('')+`</span><span>${ends[1]}</span>`+
+    `<span><span style="width:16px;height:10px;border-radius:2px;border:1px dashed var(--border);background:var(--surface-1)"></span>No comparison</span>`;
+  document.getElementById('map-note').textContent='The map follows every filter except State, and ignores "Only show highlighted". The boxes on the right repeat the small Northeastern states.'+
+    (S.state!=='All'?` The rest of the page is filtered to ${MAP[S.state]?MAP[S.state].n:S.state}.`:'');
+}
+
 /* ---------- legend ---------- */
 document.getElementById('legend').innerHTML=
   [['D','Democrat','●'],['R','Republican','■'],['I','Independent / other','▲']]
@@ -629,7 +716,7 @@ try{const t=localStorage.getItem('pvi-theme');if(t)document.documentElement.data
 function render(){
   const all=filtered(), set=hlSet(all);
   const rows=(S.only&&set.size) ? all.filter(r=>set.has(r)) : all;
-  renderTiles(rows); renderChart(rows,set); renderStrip(rows,set); LAST=renderTable(rows);
+  renderTiles(rows); renderChart(rows,set); renderStrip(rows,set); renderMap(filtered(true)); LAST=renderTable(rows);
 }
 renderControls(); render();
 let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(render,120);});

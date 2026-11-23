@@ -14,6 +14,7 @@ src/template.html                page source; data is injected at /*__DATA__*/
 scripts/build_data.py            raw sources -> data/races.json + data/candidates.csv
 src/version.js                   version shown in the footer
 scripts/build_site.py            data/races.json + template + version -> index.html
+scripts/build_map.py             us-atlas state outlines -> data/us_states.json (only if the outlines change)
 scripts/update.sh                pull the latest results, then run both builds
 data/raw/                        source snapshots (see Sources)
 data/overrides/certified_results.csv   hand-entered certified totals (take priority)
