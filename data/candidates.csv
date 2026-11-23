@@ -55,112 +55,112 @@ AR-03,House,AR,3,R+13,-24.9,True,Steve Womack,Republican,R,127497,54.8,True,True
 AR-03,House,AR,3,R+13,-24.9,True,Robb Ryerse,Democratic,D,96591,41.5,False,False,-13.3,12.7,11.6
 AR-04,House,AR,4,R+20,-39.9,True,Bruce Westerman,Republican,R,131513,65.5,True,True,30.9,-9.1,-9.0
 AR-04,House,AR,4,R+20,-39.9,True,James Russell III,Democratic,D,69376,34.5,False,False,-30.9,9.1,9.0
-CA Governor,Governor,CA,0,D+12,20.1,True,Xavier Becerra,Democratic,D,8685226,65.6,True,False,31.2,7.2,11.1
-CA Governor,Governor,CA,0,D+12,20.1,True,Steve Hilton,Republican,R,4549552,34.4,False,False,-31.2,-7.2,-11.1
-CA-01,House,CA,1,D+7,,True,Mike McGuire,Democratic,D,168896,58.8,True,False,17.6,3.6,
-CA-01,House,CA,1,D+7,,True,James Gallagher,Republican,R,118331,41.2,False,True,-17.6,-3.6,
-CA-02,House,CA,2,D+13,,True,Jared Huffman,Democratic,D,211749,66.6,True,True,33.1,7.1,
-CA-02,House,CA,2,D+13,,True,Robin Littau,Republican,R,106371,33.4,False,False,-33.1,-7.1,
-CA-03,House,CA,3,D+6,,True,Ami Bera,Democratic,D,177057,58.7,True,True,17.4,5.4,
-CA-03,House,CA,3,D+6,,True,Robb Tucker,Republican,R,124479,41.3,False,False,-17.4,-5.4,
-CA-04,House,CA,4,D+8,,True,Eric Jones,Democratic,D,134010,52.5,True,False,,,
-CA-04,House,CA,4,D+8,,True,Mike Thompson,Democratic,,121415,47.5,False,True,,,
-CA-05,House,CA,5,R+10,,True,Tom McClintock,Republican,R,164744,55.6,True,True,11.2,-8.8,
-CA-05,House,CA,5,R+10,,True,Michael Masuda,Democratic,D,131675,44.4,False,False,-11.2,8.8,
-CA-06,House,CA,6,D+5,,True,Richard Pan,Democratic,D,159679,58.8,True,False,17.7,7.7,
-CA-06,House,CA,6,D+5,,True,Kevin Kiley,other,R,111663,41.2,False,True,-17.7,-7.7,
-CA-07,House,CA,7,D+7,,True,Doris Matsui,Democratic,D,132293,52.4,True,True,,,
-CA-07,House,CA,7,D+7,,True,Mai Vang,Democratic,,120140,47.6,False,False,,,
-CA-08,House,CA,8,D+19,,True,John Garamendi,Democratic,D,191160,73.6,True,True,47.1,9.1,
-CA-08,House,CA,8,D+19,,True,Rudy Recile,Republican,R,68728,26.4,False,False,-47.1,-9.1,
-CA-09,House,CA,9,D+8,,True,Josh Harder,Democratic,D,144551,67.2,True,True,34.5,18.5,
-CA-09,House,CA,9,D+8,,True,John McBride,Republican,R,70466,32.8,False,False,-34.5,-18.5,
-CA-10,House,CA,10,D+18,,True,Mark DeSaulnier,Democratic,D,217945,69.8,True,True,39.6,3.6,
-CA-10,House,CA,10,D+18,,True,Jeff Frese,Republican,R,94294,30.2,False,False,-39.6,-3.6,
+CA Governor,Governor,CA,0,D+12,20.1,True,Xavier Becerra,Democratic,D,8715921,65.6,True,False,31.3,7.3,11.2
+CA Governor,Governor,CA,0,D+12,20.1,True,Steve Hilton,Republican,R,4561512,34.4,False,False,-31.3,-7.3,-11.2
+CA-01,House,CA,1,D+7,,True,Mike McGuire,Democratic,D,170591,58.9,True,False,17.9,3.9,
+CA-01,House,CA,1,D+7,,True,James Gallagher,Republican,R,118812,41.1,False,True,-17.9,-3.9,
+CA-02,House,CA,2,D+13,,True,Jared Huffman,Democratic,D,214120,66.7,True,True,33.4,7.4,
+CA-02,House,CA,2,D+13,,True,Robin Littau,Republican,R,106860,33.3,False,False,-33.4,-7.4,
+CA-03,House,CA,3,D+6,,True,Ami Bera,Democratic,D,178932,58.7,True,True,17.4,5.4,
+CA-03,House,CA,3,D+6,,True,Robb Tucker,Republican,R,125942,41.3,False,False,-17.4,-5.4,
+CA-04,House,CA,4,D+8,,True,Eric Jones,Democratic,D,135084,52.5,True,False,,,
+CA-04,House,CA,4,D+8,,True,Mike Thompson,Democratic,,122217,47.5,False,True,,,
+CA-05,House,CA,5,R+10,,True,Tom McClintock,Republican,R,164759,55.6,True,True,11.2,-8.8,
+CA-05,House,CA,5,R+10,,True,Michael Masuda,Democratic,D,131682,44.4,False,False,-11.2,8.8,
+CA-06,House,CA,6,D+5,,True,Richard Pan,Democratic,D,161427,58.8,True,False,17.7,7.7,
+CA-06,House,CA,6,D+5,,True,Kevin Kiley,other,R,112919,41.2,False,True,-17.7,-7.7,
+CA-07,House,CA,7,D+7,,True,Doris Matsui,Democratic,D,132903,52.4,True,True,,,
+CA-07,House,CA,7,D+7,,True,Mai Vang,Democratic,,120911,47.6,False,False,,,
+CA-08,House,CA,8,D+19,,True,John Garamendi,Democratic,D,192496,73.6,True,True,47.3,9.3,
+CA-08,House,CA,8,D+19,,True,Rudy Recile,Republican,R,68913,26.4,False,False,-47.3,-9.3,
+CA-09,House,CA,9,D+8,,True,Josh Harder,Democratic,D,145255,67.3,True,True,34.6,18.6,
+CA-09,House,CA,9,D+8,,True,John McBride,Republican,R,70632,32.7,False,False,-34.6,-18.6,
+CA-10,House,CA,10,D+18,,True,Mark DeSaulnier,Democratic,D,219761,69.8,True,True,39.6,3.6,
+CA-10,House,CA,10,D+18,,True,Jeff Frese,Republican,R,94981,30.2,False,False,-39.6,-3.6,
 CA-11,House,CA,11,D+36,,True,Scott Wiener,Democratic,D,160970,53.3,True,False,,,
 CA-11,House,CA,11,D+36,,True,Connie Chan,Democratic,,141021,46.7,False,False,,,
 CA-12,House,CA,12,D+39,,True,Lateefah Simon,Democratic,D,207160,80.4,True,True,,,
 CA-12,House,CA,12,D+39,,True,Jamie Joyce,Democratic,,50459,19.6,False,False,,,
-CA-13,House,CA,13,D+2,,True,Adam Gray,Democratic,D,109626,62.8,True,True,25.6,21.6,
-CA-13,House,CA,13,D+2,,True,Kevin Lincoln,Republican,R,65003,37.2,False,False,-25.6,-21.6,
+CA-13,House,CA,13,D+2,,True,Adam Gray,Democratic,D,110085,62.8,True,True,25.7,21.7,
+CA-13,House,CA,13,D+2,,True,Kevin Lincoln,Republican,R,65098,37.2,False,False,-25.7,-21.7,
 CA-14,House,CA,14,D+19,,True,Aisha Wahab,Democratic,D,122290,57.6,True,True,,,
 CA-14,House,CA,14,D+19,,True,Melissa Hernandez,Democratic,,90133,42.4,False,False,,,
 CA-15,House,CA,15,D+26,,True,Kevin Mullin,Democratic,D,196894,80.0,True,True,59.9,7.9,
 CA-15,House,CA,15,D+26,,True,Charles Hoelter,Republican,R,49371,20.0,False,False,-59.9,-7.9,
-CA-16,House,CA,16,D+25,,True,Sam Liccardo,Democratic,D,219681,78.0,True,True,56.0,6.0,
-CA-16,House,CA,16,D+25,,True,Peter Soulé,Republican,R,62008,22.0,False,False,-56.0,-6.0,
-CA-17,House,CA,17,D+21,,True,Ro Khanna,Democratic,D,154555,72.8,True,True,45.5,3.5,
-CA-17,House,CA,17,D+21,,True,Ritesh Tandon,Republican,R,57837,27.2,False,False,-45.5,-3.5,
-CA-18,House,CA,18,D+16,,True,Zoe Lofgren,Democratic,D,146056,73.1,True,True,46.2,14.2,
-CA-18,House,CA,18,D+16,,True,Shane Lewis,Republican,R,53769,26.9,False,False,-46.2,-14.2,
-CA-19,House,CA,19,D+18,,True,Jimmy Panetta,Democratic,D,223839,72.0,True,True,44.0,8.0,
-CA-19,House,CA,19,D+18,,True,Peter Verbica,Republican,R,87048,28.0,False,False,-44.0,-8.0,
-CA-20,House,CA,20,R+16,,True,Vince Fong,Republican,R,154072,61.1,True,True,22.2,-9.8,
-CA-20,House,CA,20,R+16,,True,Sandra Van Scotter,Democratic,D,98110,38.9,False,False,-22.2,9.8,
-CA-21,House,CA,21,D+5,,True,Jim Costa,Democratic,D,109735,65.0,True,True,30.0,20.0,
-CA-21,House,CA,21,D+5,,True,Kyle Kirkland,Republican,R,59057,35.0,False,False,-30.0,-20.0,
-CA-22,House,CA,22,D+1,,True,Randy Villegas,Democratic,D,103143,68.1,True,False,36.3,34.3,
-CA-22,House,CA,22,D+1,,True,David Valadao,Republican,R,48250,31.9,False,True,-36.3,-34.3,
-CA-23,House,CA,23,R+9,,True,Jay Obernolte,Republican,R,109548,50.8,True,True,1.6,-16.4,
-CA-23,House,CA,23,R+9,,True,Tessa Hodge,Democratic,D,106000,49.2,False,False,-1.6,16.4,
-CA-24,House,CA,24,D+13,,True,Salud Carbajal,Democratic,D,196142,66.4,True,True,32.8,6.8,
-CA-24,House,CA,24,D+13,,True,Bob Smith,Republican,R,99226,33.6,False,False,-32.8,-6.8,
-CA-25,House,CA,25,D+4,,True,Raul Ruiz,Democratic,D,144985,66.0,True,True,32.0,24.0,
-CA-25,House,CA,25,D+4,,True,Joe Males,Republican,R,74737,34.0,False,False,-32.0,-24.0,
+CA-16,House,CA,16,D+25,,True,Sam Liccardo,Democratic,D,219734,78.0,True,True,56.0,6.0,
+CA-16,House,CA,16,D+25,,True,Peter Soulé,Republican,R,62028,22.0,False,False,-56.0,-6.0,
+CA-17,House,CA,17,D+21,,True,Ro Khanna,Democratic,D,154604,72.8,True,True,45.5,3.5,
+CA-17,House,CA,17,D+21,,True,Ritesh Tandon,Republican,R,57859,27.2,False,False,-45.5,-3.5,
+CA-18,House,CA,18,D+16,,True,Zoe Lofgren,Democratic,D,146175,73.1,True,True,46.2,14.2,
+CA-18,House,CA,18,D+16,,True,Shane Lewis,Republican,R,53788,26.9,False,False,-46.2,-14.2,
+CA-19,House,CA,19,D+18,,True,Jimmy Panetta,Democratic,D,224643,72.0,True,True,44.1,8.1,
+CA-19,House,CA,19,D+18,,True,Peter Verbica,Republican,R,87239,28.0,False,False,-44.1,-8.1,
+CA-20,House,CA,20,R+16,,True,Vince Fong,Republican,R,154122,61.1,True,True,22.2,-9.8,
+CA-20,House,CA,20,R+16,,True,Sandra Van Scotter,Democratic,D,98224,38.9,False,False,-22.2,9.8,
+CA-21,House,CA,21,D+5,,True,Jim Costa,Democratic,D,109833,65.0,True,True,30.0,20.0,
+CA-21,House,CA,21,D+5,,True,Kyle Kirkland,Republican,R,59081,35.0,False,False,-30.0,-20.0,
+CA-22,House,CA,22,D+1,,True,Randy Villegas,Democratic,D,103271,68.1,True,False,36.3,34.3,
+CA-22,House,CA,22,D+1,,True,David Valadao,Republican,R,48267,31.9,False,True,-36.3,-34.3,
+CA-23,House,CA,23,R+9,,True,Jay Obernolte,Republican,R,110124,50.7,True,True,1.4,-16.6,
+CA-23,House,CA,23,R+9,,True,Tessa Hodge,Democratic,D,107137,49.3,False,False,-1.4,16.6,
+CA-24,House,CA,24,D+13,,True,Salud Carbajal,Democratic,D,196589,66.4,True,True,32.8,6.8,
+CA-24,House,CA,24,D+13,,True,Bob Smith,Republican,R,99488,33.6,False,False,-32.8,-6.8,
+CA-25,House,CA,25,D+4,,True,Raul Ruiz,Democratic,D,145941,66.0,True,True,32.1,24.1,
+CA-25,House,CA,25,D+4,,True,Joe Males,Republican,R,75067,34.0,False,False,-32.1,-24.1,
 CA-26,House,CA,26,D+9,,True,Jacqui Irwin,Democratic,D,178231,63.5,True,False,26.9,8.9,
 CA-26,House,CA,26,D+9,,True,Sam Gallucci,Republican,R,102613,36.5,False,False,-26.9,-8.9,
 CA-27,House,CA,27,D+6,,True,George Whitesides,Democratic,D,149213,64.2,True,True,28.4,16.4,
 CA-27,House,CA,27,D+6,,True,Jason Gibbs,Republican,R,83140,35.8,False,False,-28.4,-16.4,
-CA-28,House,CA,28,D+14,,True,Judy Chu,Democratic,D,181620,69.6,True,True,39.2,11.2,
-CA-28,House,CA,28,D+14,,True,April Verlato,Republican,R,79294,30.4,False,False,-39.2,-11.2,
+CA-28,House,CA,28,D+14,,True,Judy Chu,Democratic,D,181751,69.6,True,True,39.2,11.2,
+CA-28,House,CA,28,D+14,,True,April Verlato,Republican,R,79398,30.4,False,False,-39.2,-11.2,
 CA-29,House,CA,29,D+19,,True,Luz Rivas,Democratic,D,100242,57.3,True,True,,,
 CA-29,House,CA,29,D+19,,True,Angélica Dueñas,Democratic,,74798,42.7,False,False,,,
 CA-30,House,CA,30,D+21,,True,Laura Friedman,Democratic,D,201883,77.6,True,True,55.3,13.3,
 CA-30,House,CA,30,D+21,,True,Scott Meyers,Republican,R,58161,22.4,False,False,-55.3,-13.3,
-CA-31,House,CA,31,D+8,,True,Gil Cisneros,Democratic,D,158396,66.4,True,True,32.8,16.8,
-CA-31,House,CA,31,D+8,,True,Eric Ching,Republican,R,80141,33.6,False,False,-32.8,-16.8,
+CA-31,House,CA,31,D+8,,True,Gil Cisneros,Democratic,D,158613,66.4,True,True,32.8,16.8,
+CA-31,House,CA,31,D+8,,True,Eric Ching,Republican,R,80204,33.6,False,False,-32.8,-16.8,
 CA-32,House,CA,32,D+14,,True,Brad Sherman,Democratic,D,185341,67.1,True,True,34.3,6.3,
 CA-32,House,CA,32,D+14,,True,Larry Thompson,Republican,R,90770,32.9,False,False,-34.3,-6.3,
-CA-33,House,CA,33,D+7,,True,Pete Aguilar,Democratic,D,140007,69.0,True,True,37.9,23.9,
-CA-33,House,CA,33,D+7,,True,Stephanie Vargas,Republican,R,63040,31.0,False,False,-37.9,-23.9,
+CA-33,House,CA,33,D+7,,True,Pete Aguilar,Democratic,D,141480,69.0,True,True,38.1,24.1,
+CA-33,House,CA,33,D+7,,True,Stephanie Vargas,Republican,R,63418,31.0,False,False,-38.1,-24.1,
 CA-34,House,CA,34,D+28,,True,Angela Gonzales-Torres,Democratic,D,108765,62.2,True,False,,,
 CA-34,House,CA,34,D+28,,True,Jimmy Gomez,Democratic,,66091,37.8,False,True,,,
-CA-35,House,CA,35,D+6,,True,Norma Torres,Democratic,D,140537,66.8,True,True,33.6,21.6,
-CA-35,House,CA,35,D+6,,True,Mike Cargile,Republican,R,69797,33.2,False,False,-33.6,-21.6,
+CA-35,House,CA,35,D+6,,True,Norma Torres,Democratic,D,141720,66.9,True,True,33.8,21.8,
+CA-35,House,CA,35,D+6,,True,Mike Cargile,Republican,R,70129,33.1,False,False,-33.8,-21.8,
 CA-36,House,CA,36,D+21,,True,Ted Lieu,Democratic,D,224204,73.0,True,True,46.1,4.1,
 CA-36,House,CA,36,D+21,,True,Houston Brignano,Republican,R,82778,27.0,False,False,-46.1,-4.1,
 CA-37,House,CA,37,D+33,,True,Sydney Kamlager-Dove,Democratic,D,111654,60.8,True,True,,,
 CA-37,House,CA,37,D+33,,True,Samantha Mota,Democratic,,72027,39.2,False,False,,,
-CA-38,House,CA,38,D+8,,True,Hilda Solis,Democratic,D,145508,67.5,True,False,34.9,18.9,
-CA-38,House,CA,38,D+8,,True,Pedro Casas,Republican,R,70188,32.5,False,False,-34.9,-18.9,
-CA-39,House,CA,39,D+7,,True,Mark Takano,Democratic,D,133375,69.2,True,True,38.4,24.4,
-CA-39,House,CA,39,D+7,,True,Steve Manos,Republican,R,59429,30.8,False,False,-38.4,-24.4,
-CA-40,House,CA,40,R+6,,True,Ken Calvert,Republican,R,131382,52.5,True,False,,,
-CA-40,House,CA,40,R+6,,True,Young Kim,Republican,,118793,47.5,False,True,,,
-CA-41,House,CA,41,D+9,,True,Linda Sánchez,Democratic,D,171306,67.6,True,True,35.2,17.2,
-CA-41,House,CA,41,D+9,,True,Mitch Clemmons,Republican,R,82133,32.4,False,False,-35.2,-17.2,
-CA-42,House,CA,42,D+8,,True,Robert Garcia,Democratic,D,175503,62.0,True,True,23.9,7.9,
-CA-42,House,CA,42,D+8,,True,Brian Burley,Republican,R,107728,38.0,False,False,-23.9,-7.9,
+CA-38,House,CA,38,D+8,,True,Hilda Solis,Democratic,D,145517,67.5,True,False,34.9,18.9,
+CA-38,House,CA,38,D+8,,True,Pedro Casas,Republican,R,70195,32.5,False,False,-34.9,-18.9,
+CA-39,House,CA,39,D+7,,True,Mark Takano,Democratic,D,135939,69.3,True,True,38.6,24.6,
+CA-39,House,CA,39,D+7,,True,Steve Manos,Republican,R,60232,30.7,False,False,-38.6,-24.6,
+CA-40,House,CA,40,R+6,,True,Ken Calvert,Republican,R,131834,52.5,True,False,,,
+CA-40,House,CA,40,R+6,,True,Young Kim,Republican,,119261,47.5,False,True,,,
+CA-41,House,CA,41,D+9,,True,Linda Sánchez,Democratic,D,171316,67.6,True,True,35.2,17.2,
+CA-41,House,CA,41,D+9,,True,Mitch Clemmons,Republican,R,82141,32.4,False,False,-35.2,-17.2,
+CA-42,House,CA,42,D+8,,True,Robert Garcia,Democratic,D,175529,62.0,True,True,23.9,7.9,
+CA-42,House,CA,42,D+8,,True,Brian Burley,Republican,R,107747,38.0,False,False,-23.9,-7.9,
 CA-43,House,CA,43,D+27,,True,Maxine Waters,Democratic,D,156251,83.0,True,True,65.9,11.9,
 CA-43,House,CA,43,D+27,,True,Cristian Morales,Republican,R,32067,17.0,False,False,-65.9,-11.9,
 CA-44,House,CA,44,D+20,,True,Nanette Barragan,Democratic,D,148955,81.8,True,False,63.5,23.5,
 CA-44,House,CA,44,D+20,,True,Genevieve Angel,Republican,R,33202,18.2,False,False,-63.5,-23.5,
-CA-45,House,CA,45,D+3,,True,Derek Tran,Democratic,D,151922,61.0,True,True,22.0,16.0,
-CA-45,House,CA,45,D+3,,True,Chuong Vo,Republican,R,97045,39.0,False,False,-22.0,-16.0,
-CA-46,House,CA,46,D+10,,True,Lou Correa,Democratic,D,139718,71.6,True,True,43.1,23.1,
-CA-46,House,CA,46,D+10,,True,David Pan,Republican,R,55542,28.4,False,False,-43.1,-23.1,
-CA-47,House,CA,47,D+6,,True,Dave Min,Democratic,D,167099,58.6,True,True,17.2,5.2,
-CA-47,House,CA,47,D+6,,True,Jenny Rae Le Roux,Republican,R,118150,41.4,False,False,-17.2,-5.2,
-CA-48,House,CA,48,D+2,,True,Marni von Wilpert,Democratic,D,166626,59.8,True,False,19.6,15.6,
-CA-48,House,CA,48,D+2,,True,Jim Desmond,Republican,R,112120,40.2,False,False,-19.6,-15.6,
-CA-49,House,CA,49,D+7,,True,Mike Levin,Democratic,D,192199,59.5,True,True,19.0,5.0,
-CA-49,House,CA,49,D+7,,True,Armen Kurdian,Republican,R,130778,40.5,False,False,-19.0,-5.0,
-CA-50,House,CA,50,D+10,,True,Scott Peters,Democratic,D,197145,63.7,True,True,27.4,7.4,
-CA-50,House,CA,50,D+10,,True,Steve Cohen,Republican,R,112315,36.3,False,False,-27.4,-7.4,
-CA-51,House,CA,51,D+10,,True,Sara Jacobs,Democratic,D,191997,66.2,True,True,32.4,12.4,
-CA-51,House,CA,51,D+10,,True,Ricardo Cabrera,Republican,R,98103,33.8,False,False,-32.4,-12.4,
-CA-52,House,CA,52,D+11,,True,Juan Vargas,Democratic,D,158278,71.8,True,True,43.6,21.6,
-CA-52,House,CA,52,D+11,,True,Jeff Belle,Republican,R,62184,28.2,False,False,-43.6,-21.6,
+CA-45,House,CA,45,D+3,,True,Derek Tran,Democratic,D,151949,61.0,True,True,22.0,16.0,
+CA-45,House,CA,45,D+3,,True,Chuong Vo,Republican,R,97060,39.0,False,False,-22.0,-16.0,
+CA-46,House,CA,46,D+10,,True,Lou Correa,Democratic,D,139756,71.6,True,True,43.1,23.1,
+CA-46,House,CA,46,D+10,,True,David Pan,Republican,R,55564,28.4,False,False,-43.1,-23.1,
+CA-47,House,CA,47,D+6,,True,Dave Min,Democratic,D,167158,58.6,True,True,17.2,5.2,
+CA-47,House,CA,47,D+6,,True,Jenny Rae Le Roux,Republican,R,118161,41.4,False,False,-17.2,-5.2,
+CA-48,House,CA,48,D+2,,True,Marni von Wilpert,Democratic,D,167591,59.8,True,False,19.6,15.6,
+CA-48,House,CA,48,D+2,,True,Jim Desmond,Republican,R,112560,40.2,False,False,-19.6,-15.6,
+CA-49,House,CA,49,D+7,,True,Mike Levin,Democratic,D,193261,59.6,True,True,19.2,5.2,
+CA-49,House,CA,49,D+7,,True,Armen Kurdian,Republican,R,131055,40.4,False,False,-19.2,-5.2,
+CA-50,House,CA,50,D+10,,True,Scott Peters,Democratic,D,198428,63.8,True,True,27.6,7.6,
+CA-50,House,CA,50,D+10,,True,Steve Cohen,Republican,R,112625,36.2,False,False,-27.6,-7.6,
+CA-51,House,CA,51,D+10,,True,Sara Jacobs,Democratic,D,193292,66.3,True,True,32.5,12.5,
+CA-51,House,CA,51,D+10,,True,Ricardo Cabrera,Republican,R,98394,33.7,False,False,-32.5,-12.5,
+CA-52,House,CA,52,D+11,,True,Juan Vargas,Democratic,D,159281,71.9,True,True,43.7,21.7,
+CA-52,House,CA,52,D+11,,True,Jeff Belle,Republican,R,62384,28.1,False,False,-43.7,-21.7,
 CO Senate,Senate,CO,0,D+6,11.0,True,John Hickenlooper,Democratic,D,1629507,60.5,True,True,25.5,13.5,14.5
 CO Senate,Senate,CO,0,D+6,11.0,True,Mark Baisley,Republican,R,942089,35.0,False,False,-25.5,-13.5,-14.5
 CO Governor,Governor,CO,0,D+6,11.0,True,Phil Weiser,Democratic,D,1639109,61.1,True,False,27.9,15.9,16.9
@@ -181,12 +181,12 @@ CO-07,House,CO,7,D+8,15.0,True,Brittany Pettersen,Democratic,D,230008,60.7,True,
 CO-07,House,CO,7,D+8,15.0,True,Tim Bennett,Republican,R,136948,36.1,False,False,-24.6,-8.6,-9.6
 CO-08,House,CO,8,EVEN,-1.8,True,Manny Rutinel,Democratic,D,160954,55.5,True,False,14.9,14.9,16.7
 CO-08,House,CO,8,EVEN,-1.8,True,Gabe Evans,Republican,R,117709,40.6,False,True,-14.9,-14.9,-16.7
-CT Governor,Governor,CT,0,D+8,14.5,True,Ned Lamont,Democratic,D,772253,59.6,True,True,19.1,3.1,4.6
-CT Governor,Governor,CT,0,D+8,14.5,True,Ryan Fazio,Republican,R,524232,40.4,False,False,-19.1,-3.1,-4.6
+CT Governor,Governor,CT,0,D+8,14.5,True,Ned Lamont,Democratic,D,772265,59.6,True,True,19.1,3.1,4.6
+CT Governor,Governor,CT,0,D+8,14.5,True,Ryan Fazio,Republican,R,524244,40.4,False,False,-19.1,-3.1,-4.6
 CT-01,House,CT,1,D+12,22.9,True,Luke Bronin,Democratic,D,170473,67.3,True,False,36.3,12.3,13.4
 CT-01,House,CT,1,D+12,22.9,True,Amy Chai,Republican,R,78461,31.0,False,False,-36.3,-12.3,-13.4
-CT-02,House,CT,2,D+4,7.7,True,Joe Courtney,Democratic,D,180834,62.4,True,True,24.7,16.7,17.0
-CT-02,House,CT,2,D+4,7.7,True,George Austin,Republican,R,109196,37.6,False,False,-24.7,-16.7,-17.0
+CT-02,House,CT,2,D+4,7.7,True,Joe Courtney,Democratic,D,180834,62.3,True,True,24.7,16.7,17.0
+CT-02,House,CT,2,D+4,7.7,True,George Austin,Republican,R,109202,37.7,False,False,-24.7,-16.7,-17.0
 CT-03,House,CT,3,D+8,14.1,True,Rosa DeLauro,Democratic,D,151261,61.4,True,True,25.7,9.7,11.6
 CT-03,House,CT,3,D+8,14.1,True,Christopher Lancia,Republican,R,87885,35.7,False,False,-25.7,-9.7,-11.6
 CT-04,House,CT,4,D+13,23.4,True,Jim Himes,Democratic,D,157485,65.6,True,True,33.1,7.1,9.7
@@ -302,8 +302,8 @@ ID-01,House,ID,1,R+22,-45.1,True,Russ Fulcher,Republican,R,244717,64.2,True,True
 ID-01,House,ID,1,R+22,-45.1,True,Kaylee Peterson,Democratic,D,110112,28.9,False,False,-35.3,8.7,9.8
 ID-02,House,ID,2,R+13,-26.7,True,Mike Simpson,Republican,R,170868,51.7,True,True,11.4,-14.6,-15.3
 ID-02,House,ID,2,R+13,-26.7,True,Ellie Gilbreath,Democratic,D,133156,40.3,False,False,-11.4,14.6,15.3
-IL Senate,Senate,IL,0,D+6,11.0,True,Juliana Stratton,Democratic,D,2620386,62.1,True,False,25.7,13.7,14.7
-IL Senate,Senate,IL,0,D+6,11.0,True,Don Tracy,Republican,R,1534193,36.3,False,False,-25.7,-13.7,-14.7
+IL Senate,Senate,IL,0,D+6,11.0,True,Juliana Stratton,Democratic,D,2620547,62.1,True,False,25.7,13.7,14.7
+IL Senate,Senate,IL,0,D+6,11.0,True,Don Tracy,Republican,R,1534262,36.3,False,False,-25.7,-13.7,-14.7
 IL Governor,Governor,IL,0,D+6,11.0,True,JB Pritzker,Democratic,D,2575452,60.8,True,True,25.0,13.0,14.0
 IL Governor,Governor,IL,0,D+6,11.0,True,Darren Bailey,Republican,R,1516799,35.8,False,False,-25.0,-13.0,-14.0
 IL-01,House,IL,1,D+18,32.0,True,Jonathan Jackson,Democratic,D,176829,72.5,True,True,45.1,9.1,13.1
@@ -332,8 +332,8 @@ IL-12,House,IL,12,R+22,-43.5,True,Mike Bost,Republican,R,196089,69.5,True,True,3
 IL-12,House,IL,12,R+22,-43.5,True,Julie Fortier,Democratic,D,86092,30.5,False,False,-39.0,5.0,4.5
 IL-13,House,IL,13,D+5,10.6,True,Nikki Budzinski,Democratic,D,158289,62.7,True,True,25.4,15.4,14.8
 IL-13,House,IL,13,D+5,10.6,True,Jeff Wilson,Republican,R,94115,37.3,False,False,-25.4,-15.4,-14.8
-IL-14,House,IL,14,D+3,5.2,True,Lauren Underwood,Democratic,D,156810,62.9,True,True,25.7,19.7,20.5
-IL-14,House,IL,14,D+3,5.2,True,James Marter,Republican,R,92609,37.1,False,False,-25.7,-19.7,-20.5
+IL-14,House,IL,14,D+3,5.2,True,Lauren Underwood,Democratic,D,156983,62.9,True,True,25.8,19.8,20.6
+IL-14,House,IL,14,D+3,5.2,True,James Marter,Republican,R,92673,37.1,False,False,-25.8,-19.8,-20.6
 IL-15,House,IL,15,R+20,-39.9,True,Mary Miller,Republican,R,192933,66.9,True,True,33.7,-6.3,-6.2
 IL-15,House,IL,15,R+20,-39.9,True,Jennifer Todd,Democratic,D,95603,33.1,False,False,-33.7,6.3,6.2
 IL-16,House,IL,16,R+11,-22.7,True,Darin LaHood,Republican,R,173911,58.7,True,True,17.4,-4.6,-5.3
@@ -418,24 +418,24 @@ ME-01,House,ME,1,D+11,21.8,True,Chellie Pingree,Democratic,D,250452,65.9,True,Tr
 ME-01,House,ME,1,D+11,21.8,True,Ronald Russell,Republican,R,129617,34.1,False,False,-31.8,-9.8,-10.0
 ME-02,House,ME,2,R+4,-9.5,True,Paul LePage,Republican,R,170890,50.8,True,False,1.6,-6.4,-7.9
 ME-02,House,ME,2,R+4,-9.5,True,Matthew Dunlap,Democratic,D,165432,49.2,False,False,-1.6,6.4,7.9
-MD Governor,Governor,MD,0,D+15,28.5,True,Wes Moore,Democratic,D,1468655,65.4,True,True,35.0,5.0,6.5
-MD Governor,Governor,MD,0,D+15,28.5,True,Dan Cox,Republican,R,683520,30.5,False,False,-35.0,-5.0,-6.5
+MD Governor,Governor,MD,0,D+15,28.5,True,Wes Moore,Democratic,D,1470907,65.5,True,True,35.0,5.0,6.5
+MD Governor,Governor,MD,0,D+15,28.5,True,Dan Cox,Republican,R,683658,30.4,False,False,-35.0,-5.0,-6.5
 MD-01,House,MD,1,R+8,-16.8,True,Andy Harris,Republican,R,165256,52.2,True,True,4.4,-11.6,-12.4
 MD-01,House,MD,1,R+8,-16.8,True,Dan Schwartz,Democratic,D,151285,47.8,False,False,-4.4,11.6,12.4
 MD-02,House,MD,2,D+10,18.3,True,Johnny Olszewski Jr.,Democratic,D,189855,65.2,True,True,30.3,10.3,12.0
 MD-02,House,MD,2,D+10,18.3,True,Dave Wallace,Republican,R,101464,34.8,False,False,-30.3,-10.3,-12.0
 MD-03,House,MD,3,D+12,23.5,True,Sarah Elfreth,Democratic,D,212087,67.9,True,True,35.9,11.9,12.4
 MD-03,House,MD,3,D+12,23.5,True,Berney Flowers,Republican,R,100088,32.1,False,False,-35.9,-11.9,-12.4
-MD-04,House,MD,4,D+39,73.2,True,Glenn Ivey,Democratic,D,179867,89.4,True,True,83.4,5.4,10.2
-MD-04,House,MD,4,D+39,73.2,True,George McDermott,Republican,R,12041,6.0,False,False,-83.4,-5.4,-10.2
-MD-05,House,MD,5,D+17,33.1,True,Adrian Boafo,Democratic,D,228075,71.1,True,False,42.3,8.3,9.2
-MD-05,House,MD,5,D+17,33.1,True,Chris Chaffee,Republican,R,92563,28.9,False,False,-42.3,-8.3,-9.2
-MD-06,House,MD,6,D+3,5.7,True,April McClain Delaney,Democratic,D,165009,59.5,True,True,21.7,15.7,16.0
-MD-06,House,MD,6,D+3,5.7,True,Robin Ficker,Republican,R,104680,37.7,False,False,-21.7,-15.7,-16.0
+MD-04,House,MD,4,D+39,73.2,True,Glenn Ivey,Democratic,D,181293,89.4,True,True,83.4,5.4,10.2
+MD-04,House,MD,4,D+39,73.2,True,George McDermott,Republican,R,12118,6.0,False,False,-83.4,-5.4,-10.2
+MD-05,House,MD,5,D+17,33.1,True,Adrian Boafo,Democratic,D,228446,71.2,True,False,42.3,8.3,9.2
+MD-05,House,MD,5,D+17,33.1,True,Chris Chaffee,Republican,R,92589,28.8,False,False,-42.3,-8.3,-9.2
+MD-06,House,MD,6,D+3,5.7,True,April McClain Delaney,Democratic,D,165031,59.5,True,True,21.7,15.7,16.0
+MD-06,House,MD,6,D+3,5.7,True,Robin Ficker,Republican,R,104682,37.7,False,False,-21.7,-15.7,-16.0
 MD-07,House,MD,7,D+31,58.6,True,Kweisi Mfume,Democratic,D,186984,85.5,True,True,70.9,8.9,12.3
 MD-07,House,MD,7,D+31,58.6,True,Scott Collier,Republican,R,31818,14.5,False,False,-70.9,-8.9,-12.3
-MD-08,House,MD,8,D+30,55.8,True,Jamie Raskin,Democratic,D,245776,83.6,True,True,69.0,9.0,13.2
-MD-08,House,MD,8,D+30,55.8,True,Cheryl Riley,Republican,R,42924,14.6,False,False,-69.0,-9.0,-13.2
+MD-08,House,MD,8,D+30,55.8,True,Jamie Raskin,Democratic,D,245949,83.7,True,True,69.0,9.0,13.2
+MD-08,House,MD,8,D+30,55.8,True,Cheryl Riley,Republican,R,42947,14.6,False,False,-69.0,-9.0,-13.2
 MA Senate,Senate,MA,0,D+14,25.2,True,Ed Markey,Democratic,D,1718276,63.7,True,True,32.0,4.0,6.8
 MA Senate,Senate,MA,0,D+14,25.2,True,John Deaton,Republican,R,855969,31.7,False,False,-32.0,-4.0,-6.8
 MA Governor,Governor,MA,0,D+14,25.2,True,Maura Healey,Democratic,D,1691156,62.3,True,True,28.0,0.0,2.8
@@ -655,9 +655,9 @@ NY-25,House,NY,25,D+10,18.7,True,Joseph Morelle,Democratic,D,176500,62.9,True,Tr
 NY-25,House,NY,25,D+10,18.7,True,Virginia McIntyre,Republican,R,103471,36.9,False,False,-26.0,-6.0,-7.3
 NY-26,House,NY,26,D+11,19.1,True,Timothy Kennedy,Democratic,D,167886,66.1,True,True,32.4,10.4,13.3
 NY-26,House,NY,26,D+11,19.1,True,Dennis Hannon,Republican,R,85536,33.7,False,False,-32.4,-10.4,-13.3
-NC Senate,Senate,NC,0,R+1,-3.2,True,Roy Cooper,Democratic,D,2480636,58.8,True,False,19.7,21.7,22.9
-NC Senate,Senate,NC,0,R+1,-3.2,True,Michael Whatley,Republican,R,1648858,39.1,False,False,-19.7,-21.7,-22.9
-NC-01,House,NC,1,R+5,,True,Don Davis,Democratic,D,157487,50.1,True,True,3.4,13.4,
+NC Senate,Senate,NC,0,R+1,-3.2,True,Roy Cooper,Democratic,D,2480637,58.8,True,False,19.7,21.7,22.9
+NC Senate,Senate,NC,0,R+1,-3.2,True,Michael Whatley,Republican,R,1648859,39.1,False,False,-19.7,-21.7,-22.9
+NC-01,House,NC,1,R+5,,True,Don Davis,Democratic,D,157488,50.1,True,True,3.4,13.4,
 NC-01,House,NC,1,R+5,,True,Laurie Buckhout,Republican,R,146684,46.7,False,False,-3.4,-13.4,
 NC-02,House,NC,2,D+17,,True,Deborah Ross,Democratic,D,246446,75.1,True,True,51.7,17.7,
 NC-02,House,NC,2,D+17,,True,Eugene Douglass,Republican,R,76976,23.5,False,False,-51.7,-17.7,
@@ -671,7 +671,7 @@ NC-06,House,NC,6,R+9,,True,Cyril Jefferson,Democratic,D,140707,51.2,True,False,2
 NC-06,House,NC,6,R+9,,True,Addison McDowell,Republican,R,134103,48.8,False,True,-2.4,-20.4,
 NC-07,House,NC,7,R+7,,True,David Rouzer,Republican,R,160702,49.9,True,True,0.7,-13.3,
 NC-07,House,NC,7,R+7,,True,Kimberly Hardy,Democratic,D,158391,49.1,False,False,-0.7,13.3,
-NC-08,House,NC,8,R+10,,True,Mark Harris,Republican,R,147683,50.4,True,True,1.7,-18.3,
+NC-08,House,NC,8,R+10,,True,Mark Harris,Republican,R,147685,50.4,True,True,1.7,-18.3,
 NC-08,House,NC,8,R+10,,True,Colby Watson,Democratic,D,142659,48.6,False,False,-1.7,18.3,
 NC-09,House,NC,9,R+8,,True,Richard Ojeda II,Democratic,D,139456,51.1,True,False,2.3,18.3,
 NC-09,House,NC,9,R+8,,True,Richard Hudson,Republican,R,133196,48.9,False,True,-2.3,-18.3,
@@ -751,16 +751,16 @@ OR-05,House,OR,5,D+4,8.6,True,Janelle Bynum,Democratic,D,190023,54.0,True,True,1
 OR-05,House,OR,5,D+4,8.6,True,Patti Adair,Republican,R,153946,43.7,False,False,-10.2,-2.2,-1.6
 OR-06,House,OR,6,D+6,11.3,True,Andrea Salinas,Democratic,D,161915,58.0,True,True,16.1,4.1,4.8
 OR-06,House,OR,6,D+6,11.3,True,David Russ,Republican,R,116966,41.9,False,False,-16.1,-4.1,-4.8
-PA Governor,Governor,PA,0,R+1,-1.7,True,Josh Shapiro,Democratic,D,3039717,60.6,True,True,22.4,24.4,24.1
-PA Governor,Governor,PA,0,R+1,-1.7,True,Stacy Garrity,Republican,R,1914346,38.1,False,False,-22.4,-24.4,-24.1
+PA Governor,Governor,PA,0,R+1,-1.7,True,Josh Shapiro,Democratic,D,3039781,60.6,True,True,22.4,24.4,24.1
+PA Governor,Governor,PA,0,R+1,-1.7,True,Stacy Garrity,Republican,R,1914351,38.1,False,False,-22.4,-24.4,-24.1
 PA-01,House,PA,1,D+1,0.3,True,Bob Harvie,Democratic,D,189926,52.9,True,False,5.8,3.8,5.5
 PA-01,House,PA,1,D+1,0.3,True,Brian Fitzpatrick,Republican,R,169255,47.1,False,True,-5.8,-3.8,-5.5
 PA-02,House,PA,2,D+19,35.7,True,Brendan Boyle,Democratic,D,150784,80.9,True,True,61.7,23.7,26.0
 PA-02,House,PA,2,D+19,35.7,True,Jessica Arriaga,Republican,R,35663,19.1,False,False,-61.7,-23.7,-26.0
 PA-03,House,PA,3,D+40,77.3,True,Chris Rabb,Democratic,D,258437,93.6,True,False,,,
 PA-03,House,PA,3,D+40,77.3,True,Dennis Mahoney,ind,,17628,6.4,False,False,,,
-PA-04,House,PA,4,D+8,15.8,True,Madeleine Dean,Democratic,D,234207,67.3,True,True,34.5,18.5,18.7
-PA-04,House,PA,4,D+8,15.8,True,Aurora Stuski,Republican,R,114006,32.7,False,False,-34.5,-18.5,-18.7
+PA-04,House,PA,4,D+8,15.8,True,Madeleine Dean,Democratic,D,234271,67.3,True,True,34.5,18.5,18.7
+PA-04,House,PA,4,D+8,15.8,True,Aurora Stuski,Republican,R,114012,32.7,False,False,-34.5,-18.5,-18.7
 PA-05,House,PA,5,D+15,28.6,True,Mary Gay Scanlon,Democratic,D,215985,72.2,True,True,44.4,14.4,15.8
 PA-05,House,PA,5,D+15,28.6,True,Nick Manganaro,Republican,R,83075,27.8,False,False,-44.4,-14.4,-15.8
 PA-06,House,PA,6,D+6,11.4,True,Chrissy Houlahan,Democratic,D,201244,64.5,True,True,29.0,17.0,17.6
@@ -829,8 +829,8 @@ TN-02,House,TN,2,R+17,,True,Tim Burchett,Republican,R,144892,57.7,True,True,16.6
 TN-02,House,TN,2,R+17,,True,Michaela Barnett,Democratic,D,103311,41.2,False,False,-16.6,17.4,
 TN-03,House,TN,3,R+18,,True,Chuck Fleischmann,Republican,R,136110,57.6,True,True,17.4,-18.6,
 TN-03,House,TN,3,R+18,,True,Anna Golladay,Democratic,D,95051,40.2,False,False,-17.4,18.6,
-TN-04,House,TN,4,R+11,,False,Victoria Broderick,Democratic,D,95588,48.9,False,False,0.1,22.1,
-TN-04,House,TN,4,R+11,,False,Scott DesJarlais,Republican,R,95316,48.7,False,True,-0.1,-22.1,
+TN-04,House,TN,4,R+11,,False,Victoria Broderick,Democratic,D,95602,48.9,False,False,0.1,22.1,
+TN-04,House,TN,4,R+11,,False,Scott DesJarlais,Republican,R,95327,48.7,False,True,-0.1,-22.1,
 TN-05,House,TN,5,R+10,,True,Charlie Hatcher,Republican,R,110408,51.7,True,False,4.9,-15.1,
 TN-05,House,TN,5,R+10,,True,Chaz Molder,Democratic,D,99841,46.7,False,False,-4.9,15.1,
 TN-06,House,TN,6,R+13,,True,Johnny Garrett,Republican,R,120950,50.8,True,False,3.3,-22.7,
@@ -957,24 +957,24 @@ VA-10,House,VA,10,D+6,8.3,True,Suhas Subramanyam,Democratic,D,207164,61.7,True,T
 VA-10,House,VA,10,D+6,8.3,True,Dave Beckwith,Republican,R,122064,36.3,False,False,-25.3,-13.3,-17.0
 VA-11,House,VA,11,D+18,34.0,True,James Walkinshaw,Democratic,D,252443,74.3,True,True,50.1,14.1,16.1
 VA-11,House,VA,11,D+18,34.0,True,Arthur Purves,Republican,R,82248,24.2,False,False,-50.1,-14.1,-16.1
-WA-01,House,WA,1,D+15,28.5,True,Suzan DelBene,Democratic,D,199644,67.5,True,True,35.3,5.3,6.8
-WA-01,House,WA,1,D+15,28.5,True,Mary Silva,Republican,R,95160,32.2,False,False,-35.3,-5.3,-6.8
+WA-01,House,WA,1,D+15,28.5,True,Suzan DelBene,Democratic,D,199681,67.5,True,True,35.3,5.3,6.8
+WA-01,House,WA,1,D+15,28.5,True,Mary Silva,Republican,R,95175,32.2,False,False,-35.3,-5.3,-6.8
 WA-02,House,WA,2,D+12,23.5,True,Rick Larsen,Democratic,D,231685,66.5,True,True,33.4,9.4,9.9
 WA-02,House,WA,2,D+12,23.5,True,Edwin Feller,Republican,R,115300,33.1,False,False,-33.4,-9.4,-9.9
 WA-03,House,WA,3,R+2,-3.3,True,Marie Gluesenkamp Perez,Democratic,D,190386,53.7,True,True,8.3,12.3,11.6
 WA-03,House,WA,3,R+2,-3.3,True,John Braun,Republican,R,160969,45.4,False,False,-8.3,-12.3,-11.6
-WA-04,House,WA,4,R+10,-20.5,True,Amanda McKinney,Republican,R,130980,53.7,True,False,7.5,-12.5,-13.0
-WA-04,House,WA,4,R+10,-20.5,True,John Duresky,Democratic,D,112566,46.1,False,False,-7.5,12.5,13.0
-WA-05,House,WA,5,R+5,-10.7,True,Michael Baumgartner,Republican,R,172154,52.2,True,True,4.7,-5.3,-6.0
-WA-05,House,WA,5,R+5,-10.7,True,Carmela Conroy,Democratic,D,156703,47.5,False,False,-4.7,5.3,6.0
-WA-06,House,WA,6,D+10,19.2,True,Emily Randall,Democratic,D,224825,62.5,True,True,25.1,5.1,5.9
-WA-06,House,WA,6,D+10,19.2,True,Teresa Fox,Republican,R,134366,37.3,False,False,-25.1,-5.1,-5.9
-WA-07,House,WA,7,D+39,74.5,True,Pramila Jayapal,Democratic,D,328065,87.6,True,True,75.6,-2.4,1.1
-WA-07,House,WA,7,D+39,74.5,True,Nirav Sheth,Republican,R,44971,12.0,False,False,-75.6,2.4,-1.1
-WA-08,House,WA,8,D+3,5.7,True,Kim Schrier,Democratic,D,195285,57.1,True,True,14.5,8.5,8.8
-WA-08,House,WA,8,D+3,5.7,True,Spencer Meline,Republican,R,145585,42.6,False,False,-14.5,-8.5,-8.8
-WA-09,House,WA,9,D+22,41.0,True,Adam Smith,Democratic,D,191877,75.7,True,True,52.2,8.2,11.2
-WA-09,House,WA,9,D+22,41.0,True,Doug Basler,Republican,R,59655,23.5,False,False,-52.2,-8.2,-11.2
+WA-04,House,WA,4,R+10,-20.5,True,Amanda McKinney,Republican,R,131069,53.6,True,False,7.5,-12.5,-13.0
+WA-04,House,WA,4,R+10,-20.5,True,John Duresky,Democratic,D,112754,46.1,False,False,-7.5,12.5,13.0
+WA-05,House,WA,5,R+5,-10.7,True,Michael Baumgartner,Republican,R,172170,52.2,True,True,4.7,-5.3,-6.0
+WA-05,House,WA,5,R+5,-10.7,True,Carmela Conroy,Democratic,D,156720,47.5,False,False,-4.7,5.3,6.0
+WA-06,House,WA,6,D+10,19.2,True,Emily Randall,Democratic,D,224970,62.5,True,True,25.1,5.1,5.9
+WA-06,House,WA,6,D+10,19.2,True,Teresa Fox,Republican,R,134427,37.3,False,False,-25.1,-5.1,-5.9
+WA-07,House,WA,7,D+39,74.5,True,Pramila Jayapal,Democratic,D,328188,87.6,True,True,75.6,-2.4,1.1
+WA-07,House,WA,7,D+39,74.5,True,Nirav Sheth,Republican,R,44989,12.0,False,False,-75.6,2.4,-1.1
+WA-08,House,WA,8,D+3,5.7,True,Kim Schrier,Democratic,D,195320,57.2,True,True,14.6,8.6,8.9
+WA-08,House,WA,8,D+3,5.7,True,Spencer Meline,Republican,R,145598,42.6,False,False,-14.6,-8.6,-8.9
+WA-09,House,WA,9,D+22,41.0,True,Adam Smith,Democratic,D,191970,75.7,True,True,52.2,8.2,11.2
+WA-09,House,WA,9,D+22,41.0,True,Doug Basler,Republican,R,59674,23.5,False,False,-52.2,-8.2,-11.2
 WA-10,House,WA,10,D+9,17.9,True,Marilyn Strickland,Democratic,D,178471,64.0,True,True,28.7,10.7,10.8
 WA-10,House,WA,10,D+9,17.9,True,Chris Chung,Republican,R,98590,35.4,False,False,-28.7,-10.7,-10.8
 WV Senate,Senate,WV,0,R+21,-41.9,True,Shelley Moore Capito,Republican,R,266772,58.3,True,True,20.3,-21.7,-21.6
