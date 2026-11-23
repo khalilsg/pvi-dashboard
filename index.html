@@ -83,6 +83,11 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
 .site-footer a{color:var(--text-secondary)}
 .grid2{display:grid;grid-template-columns:1fr;gap:14px}
 .theme-toggle{float:right}
+.btn[aria-pressed="true"]{background:var(--text-primary);color:var(--surface-1);border-color:var(--text-primary)}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn[hidden]{display:none}
+.hl-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;margin-top:12px}
+#hit{cursor:pointer}
 </style>
 </head>
 <body>
@@ -114,6 +119,12 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
       </div>
       <div class="legend" id="legend"></div>
     </div>
+    <div class="hl-row">
+      <div class="f"><label>Highlight</label><div class="seg" id="f-hl"></div></div>
+      <button class="btn" id="only" type="button">Only show highlighted</button>
+      <button class="btn" id="unpin" type="button" hidden>Clear pins</button>
+    </div>
+    <p class="note" id="hl-note" style="margin-top:6px"></p>
     <div id="chart"><div class="tip" id="tip" role="status"></div></div>
     <p class="note" id="chart-note"></p>
   </div>
@@ -152,7 +163,7 @@ td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-seco
   <footer class="site-footer">
     <a href="https://github.com/khalilsg/pvi-dashboard">Source on GitHub</a>
     <span aria-hidden="true">·</span>
-    <span>v1.0</span>
+    <span>v1.0.1</span>
   </footer>
 </div>
 </div>
@@ -181,8 +192,10 @@ for (const r of DATA.races) {
 }
 
 /* ---------- state ---------- */
-const DEF = {body:'All', party:'All', state:'All', inc:'All', res:'All', call:'All', metric:'pvi', q:''};
-let S = {...DEF};
+const fresh = () => ({body:new Set(), party:new Set(), inc:new Set(), state:'All', res:'All', call:'All', metric:'pvi', q:'', hl:'none', only:false});
+let S = fresh();
+const PINS = new Set();
+const pinKey = r => r.name+'|'+r.race;
 let sortKey = null, sortDir = -1;
 
 function seg(id, key, opts){
@@ -194,10 +207,28 @@ function seg(id, key, opts){
     el.appendChild(b);
   }
 }
+// Multi-select: an empty set means "All"; picking every option collapses back to it.
+function mseg(id, key, opts){
+  const el = document.getElementById(id); el.innerHTML=''; el.title='Pick one or more';
+  const add=(label,on,fn)=>{
+    const b=document.createElement('button'); b.textContent=label; b.type='button';
+    b.setAttribute('aria-pressed', on);
+    b.onclick=()=>{fn(); renderControls(); render();};
+    el.appendChild(b);
+  };
+  add('All', S[key].size===0, ()=>S[key].clear());
+  for (const [val,label] of opts)
+    add(label, S[key].has(val), ()=>{
+      S[key].has(val) ? S[key].delete(val) : S[key].add(val);
+      if (S[key].size===opts.length) S[key].clear();
+    });
+}
 function renderControls(){
-  seg('f-body','body',[['All','All'],['Senate','Senate'],['Governor','Governor'],['House','House']]);
-  seg('f-party','party',[['All','All'],['D','Dem'],['R','Rep'],['I','Ind/Other']]);
-  seg('f-inc','inc',[['All','All'],['Incumbent','Incumbents'],['Challenger','Challengers'],['Open seat','Open seats']]);
+  mseg('f-body','body',[['Senate','Senate'],['Governor','Governor'],['House','House']]);
+  mseg('f-party','party',[['D','Dem'],['R','Rep'],['I','Ind/Other']]);
+  mseg('f-inc','inc',[['Incumbent','Incumbents'],['Challenger','Challengers'],['Open seat','Open seats']]);
+  seg('f-hl','hl',[['none','Off'],['standouts','Standouts'],['flips','Won against the lean'],['close','Closest wins']]);
+  document.getElementById('only').setAttribute('aria-pressed', S.only);
   seg('f-res','res',[['All','All'],['won','Won'],['lost','Lost']]);
   seg('f-call','call',[['All','All'],['called','Called'],['uncalled','Not called'],['certified','Certified']]);
   seg('f-metric','metric',[['pvi','Cook PVI'],['2024','2024 pres.']]);
@@ -208,14 +239,16 @@ const states=[...new Set(ROWS.map(r=>r.state))].sort();
 document.getElementById('f-state').innerHTML='<option value="All">All states</option>'+states.map(s=>`<option>${s}</option>`).join('');
 document.getElementById('f-state').onchange=e=>{S.state=e.target.value;render();};
 document.getElementById('f-q').oninput=e=>{S.q=e.target.value;render();};
-document.getElementById('reset').onclick=()=>{S={...DEF};sortKey=null;sortDir=-1;renderControls();render();};
+document.getElementById('only').onclick=()=>{S.only=!S.only;renderControls();render();};
+document.getElementById('unpin').onclick=()=>{PINS.clear();render();};
+document.getElementById('reset').onclick=()=>{S=fresh();PINS.clear();sortKey=null;sortDir=-1;renderControls();render();};
 document.getElementById('asof').textContent=new Date(DATA.updated_results).toUTCString().replace(':00 GMT',' UTC');
 
 function filtered(){
   const q=S.q.trim().toLowerCase();
   return ROWS.filter(r=>
-    (S.body==='All'||r.body===S.body) && (S.party==='All'||r.party===S.party) &&
-    (S.state==='All'||r.state===S.state) && (S.inc==='All'||r.inc===S.inc) &&
+    (!S.body.size||S.body.has(r.body)) && (!S.party.size||S.party.has(r.party)) &&
+    (S.state==='All'||r.state===S.state) && (!S.inc.size||S.inc.has(r.inc)) &&
     (S.res==='All'||(S.res==='won')===r.won) && (S.call==='All'||(S.call==='certified'?!!r.certified:(S.call==='called')===r.called)) &&
     (!q || r.name.toLowerCase().includes(q) || r.race.toLowerCase().includes(q)));
 }
@@ -225,6 +258,27 @@ const fmt=v=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1);
 const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const COLOR={D:'var(--dem)',R:'var(--rep)',I:'var(--ind)'};
+
+/* ---------- highlight set ---------- */
+const HL_DESC={
+  standouts:'The six biggest over- and underperformers among the candidates shown.',
+  flips:'Winners on ground that leaned against their party, up to the 12 most hostile.',
+  close:'The 12 narrowest wins among the candidates shown.'
+};
+function hlSet(rows){
+  const ek=expKey(), k=vsKey();
+  const pts=rows.filter(r=>r[ek]!=null&&r.margin!=null);
+  let pick=[];
+  if(S.hl==='standouts'){
+    const by=pts.filter(r=>r[k]!=null).sort((a,b)=>b[k]-a[k]);
+    pick=by.length<=12?by:[...by.slice(0,6),...by.slice(-6)];
+  } else if(S.hl==='flips'){
+    pick=pts.filter(r=>r.won&&r[ek]<0).sort((a,b)=>a[ek]-b[ek]).slice(0,12);
+  } else if(S.hl==='close'){
+    pick=pts.filter(r=>r.won).sort((a,b)=>Math.abs(a.margin)-Math.abs(b.margin)).slice(0,12);
+  }
+  return new Set([...pick,...pts.filter(r=>PINS.has(pinKey(r)))]);
+}
 
 /* ---------- tiles ---------- */
 function renderTiles(rows){
@@ -248,7 +302,7 @@ const SHAPE={
   I:(x,y,r)=>`<path d="M${x},${y-r*1.15}L${x+r*1.1},${y+r*.8}L${x-r*1.1},${y+r*.8}Z"/>`
 };
 let PTS=[], SCALE=null;
-function renderChart(rows){
+function renderChart(rows,set){
   const ek=expKey(), base=S.metric==='pvi'?'PVI-implied margin':'2024 presidential margin';
   document.getElementById('chart-title').textContent=`Actual 2026 margin vs. ${base}`;
   const pts=rows.filter(r=>r[ek]!=null&&r.margin!=null);
@@ -277,21 +331,48 @@ function renderChart(rows){
   s+=`<text x="${(m.l+W-m.r)/2}" y="${H-6}" font-size="12" text-anchor="middle" fill="var(--text-secondary)">${base} (candidate's party view)</text>`;
   s+=`<text transform="translate(12,${(m.t+H-m.b)/2}) rotate(-90)" font-size="12" text-anchor="middle" fill="var(--text-secondary)">Actual 2026 margin</text>`;
   const r=W<520?3.5:4.5;
+  const hasHl=set.size>0;
   for(const p of ['I','R','D']){
-    s+=`<g fill="${COLOR[p]}" fill-opacity=".78" stroke="var(--surface-1)" stroke-width="1">`;
-    for(const d of pts) if(d.party===p) s+=SHAPE[p](x(d[ek]),y(d.margin),r);
+    s+=`<g fill="${COLOR[p]}" fill-opacity="${hasHl?.16:.78}" stroke="${hasHl?'none':'var(--surface-1)'}" stroke-width="1">`;
+    for(const d of pts) if(d.party===p&&!set.has(d)) s+=SHAPE[p](x(d[ek]),y(d.margin),r);
     s+='</g>';
+  }
+  let unlabeled=0;
+  if(hasHl){
+    const hp=pts.filter(d=>set.has(d)).map(d=>({d,px:x(d[ek]),py:y(d.margin)})).sort((a,b)=>a.py-b.py);
+    for(const q of hp) s+=`<g fill="${COLOR[q.d.party]}" stroke="var(--text-primary)" stroke-width="1.2">${SHAPE[q.d.party](q.px,q.py,r+1.5)}</g>`;
+    // Greedy label placement: nearest free slot around each dot, with a leader line when it has to move away.
+    const pb=hp.map(q=>[q.px-r-3,q.py-r-3,q.px+r+3,q.py+r+3]), placed=[];
+    const hits=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
+    hp.forEach((q,i)=>{
+      const w=q.d.name.length*6.5+q.d.race.length*5.8+10;
+      for(const dist of [5,20,38,58,80]) for(const [ux,uy] of [[1,0],[-1,0],[.7,-.7],[-.7,-.7],[.7,.7],[-.7,.7],[0,-1],[0,1]]){
+        const ax=q.px+ux*(dist+r+2), ay=q.py+uy*(dist+r+2);
+        const x0=ux>0?ax:ux<0?ax-w:ax-w/2, bx=[x0,ay-9,x0+w,ay+7];
+        if(x0<m.l+2||x0+w>W-m.r-2||bx[1]<m.t||bx[3]>H-m.b) continue;
+        if(placed.some(b=>hits(bx,b))||pb.some((b,j)=>j!==i&&hits(bx,b))) continue;
+        placed.push(bx);
+        if(dist>5) s+=`<line x1="${q.px+ux*(r+2)}" y1="${q.py+uy*(r+2)}" x2="${ax-ux*2}" y2="${ay-uy*2}" stroke="var(--text-muted)"/>`;
+        s+=`<text x="${ax}" y="${ay+4}" text-anchor="${ux>0?'start':ux<0?'end':'middle'}" font-size="11" font-weight="600" fill="var(--text-primary)" stroke="var(--surface-1)" stroke-width="3" paint-order="stroke" stroke-linejoin="round">${esc(q.d.name)} <tspan font-weight="400" fill="var(--text-secondary)">${esc(q.d.race)}</tspan></text>`;
+        return;
+      }
+      unlabeled++;
+    });
   }
   s+=`<g id="hl"></g><rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/></svg>`;
   const tip=document.getElementById('tip');
   box.innerHTML=s; box.appendChild(tip);
   PTS=pts.map(d=>({d,px:x(d[ek]),py:y(d.margin)}));
   const svg=box.querySelector('svg'), hit=box.querySelector('#hit'), hl=box.querySelector('#hl');
-  const move=e=>{
+  const nearest=e=>{
     const pt=svg.getBoundingClientRect(), sc=W/pt.width;
     const mx=(e.clientX-pt.left)*sc, my=(e.clientY-pt.top)*sc;
     let best=null,bd=(W<520?22:16)**2;
     for(const q of PTS){const dd=(q.px-mx)**2+(q.py-my)**2;if(dd<bd){bd=dd;best=q;}}
+    return [best,sc];
+  };
+  const move=e=>{
+    const [best,sc]=nearest(e);
     if(!best){tip.style.opacity=0;hl.innerHTML='';return;}
     const d=best.d;
     hl.innerHTML=`<g fill="${COLOR[d.party]}" stroke="var(--text-primary)" stroke-width="2">${SHAPE[d.party](best.px,best.py,r+2.5)}</g>`;
@@ -305,6 +386,17 @@ function renderChart(rows){
   };
   hit.addEventListener('pointermove',move); hit.addEventListener('pointerdown',move);
   hit.addEventListener('pointerleave',()=>{tip.style.opacity=0;hl.innerHTML='';});
+  hit.addEventListener('click',e=>{
+    const [best]=nearest(e); if(!best) return;
+    const k=pinKey(best.d); PINS.has(k)?PINS.delete(k):PINS.add(k); render();
+  });
+  const nPin=pts.filter(d=>PINS.has(pinKey(d))).length;
+  document.getElementById('hl-note').textContent =
+    (S.hl==='none' ? '' : HL_DESC[S.hl]+' ') + (nPin ? `${nPin} pinned by hand. ` : '') +
+    (unlabeled ? `${unlabeled} highlighted ${unlabeled===1?'dot has':'dots have'} no room for a label; hover to identify. ` : '') +
+    'Click any dot to pin or unpin its name.';
+  document.getElementById('unpin').hidden = PINS.size===0;
+  document.getElementById('only').disabled = !hasHl;
   const missing=rows.length-pts.length;
   document.getElementById('chart-note').textContent = missing>0 ? `${missing} of the ${rows.length} filtered candidates aren't plotted because they have no ${S.metric==='pvi'?'D-vs-R comparison':'2024 baseline (redrawn district, same-party race or missing data)'}.` : '';
 }
@@ -355,9 +447,13 @@ document.getElementById('theme').onclick=()=>{
 };
 try{const t=localStorage.getItem('pvi-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}
 
-function render(){ const rows=filtered(); renderTiles(rows); renderChart(rows); LAST=renderTable(rows); }
+function render(){
+  const all=filtered(), set=hlSet(all);
+  const rows=(S.only&&set.size) ? all.filter(r=>set.has(r)) : all;
+  renderTiles(rows); renderChart(rows,set); LAST=renderTable(rows);
+}
 renderControls(); render();
-let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>renderChart(filtered()),120);});
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(render,120);});
 </script>
 </body>
 </html>
