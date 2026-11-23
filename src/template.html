@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 Candidates vs. Cook PVI</title>
+<style>
+.viz-root{
+  color-scheme:light;
+  --surface-0:#f4f3f0; --surface-1:#fcfcfb; --border:#e3e2dd; --grid:#ecebe7;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#76756f;
+  --dem:#2a78d6; --rep:#e34948; --ind:#1baf7a; --neutral-mid:#f0efec;
+  --over-band:rgba(42,120,214,.05); --accent:#2a78d6;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])) .viz-root{
+    color-scheme:dark;
+    --surface-0:#121211; --surface-1:#1a1a19; --border:#2e2e2b; --grid:#262624;
+    --text-primary:#f0efec; --text-secondary:#c3c2b7; --text-muted:#9a9990;
+    --dem:#3987e5; --rep:#e66767; --ind:#199e70; --neutral-mid:#383835;
+    --over-band:rgba(57,135,229,.07); --accent:#3987e5;
+  }
+}
+:root[data-theme="dark"] .viz-root{
+  color-scheme:dark;
+  --surface-0:#121211; --surface-1:#1a1a19; --border:#2e2e2b; --grid:#262624;
+  --text-primary:#f0efec; --text-secondary:#c3c2b7; --text-muted:#9a9990;
+  --dem:#3987e5; --rep:#e66767; --ind:#199e70; --neutral-mid:#383835;
+  --over-band:rgba(57,135,229,.07); --accent:#3987e5;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.viz-root{background:var(--surface-0);color:var(--text-primary);min-height:100vh;padding:20px clamp(12px,3vw,32px) 48px}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font-size:clamp(20px,3.2vw,28px);margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--text-secondary);margin:0 0 16px;max-width:820px}
+.card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px}
+.filters{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:14px}
+@media (min-width:900px){.filters{position:sticky;top:0;z-index:5}}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:6px 10px;font-size:13px;color:var(--text-secondary);border-right:1px solid var(--border);white-space:nowrap}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--text-primary);color:var(--surface-1)}
+.seg button:focus-visible,select:focus-visible,input:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select,input[type=search]{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:var(--surface-1);color:var(--text-primary);min-width:0}
+input[type=search]{width:170px}
+.btn{all:unset;cursor:pointer;font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;color:var(--text-secondary)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.tile .k{font-size:12px;color:var(--text-muted)}
+.tile .v{font-size:26px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile .d{font-size:12px;color:var(--text-secondary)}
+.sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:0}
+.chart-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline}
+.chart-head h2{font-size:16px;margin:0}
+.chart-head p{margin:2px 0 0;color:var(--text-secondary);font-size:13px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text-secondary)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+#chart{position:relative;margin-top:8px}
+#chart svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.tip{position:absolute;pointer-events:none;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);min-width:190px;opacity:0;transition:opacity .08s}
+.tip b{font-size:13px}
+.tip .row{display:flex;justify-content:space-between;gap:12px;color:var(--text-secondary)}
+.tip .row span:last-child{color:var(--text-primary);font-variant-numeric:tabular-nums}
+.tbl-wrap{overflow:auto;max-height:640px;margin-top:10px;border:1px solid var(--border);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;border-bottom:1px solid var(--grid);text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:var(--surface-1);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);cursor:pointer;user-select:none}
+th.num,td.num{text-align:right}
+th[aria-sort="ascending"]::after{content:" ▲"} th[aria-sort="descending"]::after{content:" ▼"}
+td .pos{color:var(--text-primary);font-weight:600} td .neg{color:var(--text-secondary)}
+.bar{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-left:6px}
+.muted{color:var(--text-muted)}
+.note{font-size:12px;color:var(--text-muted);margin-top:8px}
+.method{margin-top:14px;font-size:13px;color:var(--text-secondary)}
+.method h2{font-size:15px;color:var(--text-primary);margin:0 0 6px}
+.method h3{font-size:13px;color:var(--text-primary);margin:14px 0 4px}
+.method ul{margin:4px 0;padding-left:18px}
+.method a{color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr;gap:14px}
+.theme-toggle{float:right}
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+  <button class="btn theme-toggle" id="theme" aria-label="Toggle dark mode">◐ Theme</button>
+  <h1>2026 candidates vs. their district's lean</h1>
+  <p class="sub">Every major-party (and leading independent) candidate for Senate, governor and House in 2026, showing how their margin compared with the margin their state or district's <b>Cook PVI</b> implies, or with the <b>2024 presidential</b> margin. Positive means the candidate ran ahead of the baseline.</p>
+
+  <div class="card filters" role="group" aria-label="Filters">
+    <div class="f"><label>Body</label><div class="seg" id="f-body"></div></div>
+    <div class="f"><label>Party</label><div class="seg" id="f-party"></div></div>
+    <div class="f"><label for="f-state">State</label><select id="f-state"></select></div>
+    <div class="f"><label>Incumbency</label><div class="seg" id="f-inc"></div></div>
+    <div class="f"><label>Result</label><div class="seg" id="f-res"></div></div>
+    <div class="f"><label>Race call</label><div class="seg" id="f-call"></div></div>
+    <div class="f"><label>Compare to</label><div class="seg" id="f-metric"></div></div>
+    <div class="f"><label for="f-q">Search</label><input type="search" id="f-q" placeholder="Name or race (e.g. PA-07)"></div>
+    <div class="f"><label>&nbsp;</label><button class="btn" id="reset">Reset</button></div>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="card">
+    <div class="chart-head">
+      <div>
+        <h2 id="chart-title">Actual margin vs. PVI-implied margin</h2>
+        <p id="chart-sub">Each dot is one candidate, from their own party's point of view. Dots above the diagonal ran ahead of the baseline.</p>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div id="chart"><div class="tip" id="tip" role="status"></div></div>
+    <p class="note" id="chart-note"></p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="chart-head">
+      <div><h2>Candidate table</h2><p id="tbl-sub">Sorted by over/underperformance. Click a column header to sort.</p></div>
+      <div style="display:flex;gap:8px"><button class="btn" id="copy">Copy CSV</button><button class="btn" id="csv">Download CSV</button></div>
+    </div>
+    <div class="tbl-wrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+    <p class="note" id="tbl-note"></p>
+  </div>
+
+  <div class="card method">
+    <h2>Method and sources</h2>
+    <h3>How performance is measured</h3>
+    <ul>
+      <li><b>Margin</b> is the candidate's share minus the main opponent's share, as a percentage of all votes in the race, from the candidate's own point of view.</li>
+      <li><b>PVI-implied margin</b> is 2 × PVI in the candidate's party's direction (D+5 → Democrat +10, Republican −10). Cook PVI measures two-party lean relative to the nation, so this baseline assumes an evenly split national environment. In a year that leans toward one party, most of that party's candidates will "overperform" by a similar amount, so compare candidates against each other, not against zero.</li>
+      <li><b>vs. 2024</b> is the candidate's margin minus Harris's (for Democrats) or Trump's (for Republicans) 2024 margin in the same state or district.</li>
+      <li>Where a party fielded no candidate and an independent was the main opponent (for example Nebraska and Idaho Senate), the independent is used as that side. Same-party contests (California top-two, uncontested seats) have no D-vs-R comparison and are listed with blank values.</li>
+    </ul>
+    <h3>Caveats</h3>
+    <ul>
+      <li>Results are unofficial until each state certifies; races marked "Certified" use certified totals entered by hand. A handful of House races were still being counted when this snapshot was taken (see "Race call").</li>
+      <li>District 2024 margins are left out for the nine states that used new House maps in 2026 (AL, CA, FL, LA, NC, OH, TN, TX, UT), because the 2024 figures are for the old lines. Missouri's new map was blocked, so Missouri uses its 2022 map and its PVI and 2024 figures match those lines. NY-21's 2024 district figure is blank in the source.</li>
+      <li>Statewide 2024 margins are summed from the district file.</li>
+    </ul>
+    <h3>Sources</h3>
+    <ul>
+      <li><b>Cook PVI</b>: © The Cook Political Report with Amy Walter. 2026 Cook PVI scores for states and districts, as listed on Wikipedia's <a href="https://en.wikipedia.org/wiki/Cook_Partisan_Voting_Index">Cook Partisan Voting Index</a> article; Missouri's 2022-map values from the election-tracker snapshot below. See <a href="https://www.cookpolitical.com/cook-pvi">cookpolitical.com/cook-pvi</a>.</li>
+      <li><b>2026 results and incumbents</b>: <a href="https://github.com/Tom-Neverwinter/election-tracker">Tom-Neverwinter/election-tracker</a> (results from NBC News, with vote data from the Associated Press). Snapshot: <span id="asof"></span>.</li>
+      <li><b>2024 presidential results by district</b>: <a href="https://github.com/jaytimm/PresElectionResults">jaytimm/PresElectionResults</a>, compiled from state election offices and Drew Savicki / The Downballot.</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+/* ---------- flatten to candidate rows ---------- */
+const PARTY = p => { p=(p||'').toLowerCase(); return p.startsWith('dem')?'D':p.startsWith('rep')?'R':'I'; };
+const ROWS = [];
+for (const r of DATA.races) {
+  for (const c of r.cands) {
+    if (!c.side) continue; // only the two main sides per race
+    const party = PARTY(c.party);
+    ROWS.push({
+      name:c.name, party, partyLabel: party==='D'?'Dem':party==='R'?'Rep':(c.party==='ind'?'Ind':'Other'),
+      race:r.label, body:r.body, state:r.state, district:r.district, pvi:r.pvi,
+      called:r.called, pctIn:r.pct_in, won:c.won, share:c.share, votes:c.votes,
+      inc: c.incumbent ? 'Incumbent' : (r.incumbent_ran ? 'Challenger' : 'Open seat'),
+      margin:c.margin,
+      expPvi: (r.pvi_num==null||c.margin==null) ? null : +(2*r.pvi_num*(c.side==='D'?1:-1)).toFixed(1),
+      exp24: (r.pres24_margin==null||c.margin==null) ? null : +(r.pres24_margin*(c.side==='D'?1:-1)).toFixed(1),
+      vsPvi:c.vs_pvi, vs24:c.vs_2024, redrawn:r.redrawn, note:r.note, certified:r.certified
+    });
+  }
+}
+
+/* ---------- state ---------- */
+const DEF = {body:'All', party:'All', state:'All', inc:'All', res:'All', call:'All', metric:'pvi', q:''};
+let S = {...DEF};
+let sortKey = null, sortDir = -1;
+
+function seg(id, key, opts){
+  const el = document.getElementById(id); el.innerHTML='';
+  for (const [val,label] of opts){
+    const b=document.createElement('button'); b.textContent=label; b.type='button';
+    b.setAttribute('aria-pressed', S[key]===val);
+    b.onclick=()=>{S[key]=val; renderControls(); render();};
+    el.appendChild(b);
+  }
+}
+function renderControls(){
+  seg('f-body','body',[['All','All'],['Senate','Senate'],['Governor','Governor'],['House','House']]);
+  seg('f-party','party',[['All','All'],['D','Dem'],['R','Rep'],['I','Ind/Other']]);
+  seg('f-inc','inc',[['All','All'],['Incumbent','Incumbents'],['Challenger','Challengers'],['Open seat','Open seats']]);
+  seg('f-res','res',[['All','All'],['won','Won'],['lost','Lost']]);
+  seg('f-call','call',[['All','All'],['called','Called'],['uncalled','Not called'],['certified','Certified']]);
+  seg('f-metric','metric',[['pvi','Cook PVI'],['2024','2024 pres.']]);
+  document.getElementById('f-state').value=S.state;
+  document.getElementById('f-q').value=S.q;
+}
+const states=[...new Set(ROWS.map(r=>r.state))].sort();
+document.getElementById('f-state').innerHTML='<option value="All">All states</option>'+states.map(s=>`<option>${s}</option>`).join('');
+document.getElementById('f-state').onchange=e=>{S.state=e.target.value;render();};
+document.getElementById('f-q').oninput=e=>{S.q=e.target.value;render();};
+document.getElementById('reset').onclick=()=>{S={...DEF};sortKey=null;sortDir=-1;renderControls();render();};
+document.getElementById('asof').textContent=new Date(DATA.updated_results).toUTCString().replace(':00 GMT',' UTC');
+
+function filtered(){
+  const q=S.q.trim().toLowerCase();
+  return ROWS.filter(r=>
+    (S.body==='All'||r.body===S.body) && (S.party==='All'||r.party===S.party) &&
+    (S.state==='All'||r.state===S.state) && (S.inc==='All'||r.inc===S.inc) &&
+    (S.res==='All'||(S.res==='won')===r.won) && (S.call==='All'||(S.call==='certified'?!!r.certified:(S.call==='called')===r.called)) &&
+    (!q || r.name.toLowerCase().includes(q) || r.race.toLowerCase().includes(q)));
+}
+const vsKey=()=>S.metric==='pvi'?'vsPvi':'vs24';
+const expKey=()=>S.metric==='pvi'?'expPvi':'exp24';
+const fmt=v=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1);
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const COLOR={D:'var(--dem)',R:'var(--rep)',I:'var(--ind)'};
+
+/* ---------- tiles ---------- */
+function renderTiles(rows){
+  const k=vsKey(), base=S.metric==='pvi'?'PVI':'2024';
+  const med=p=>median(rows.filter(r=>r.party===p&&r[k]!=null).map(r=>r[k]));
+  const n=p=>rows.filter(r=>r.party===p&&r[k]!=null).length;
+  const best=rows.filter(r=>r[k]!=null).sort((a,b)=>b[k]-a[k])[0];
+  const t=[
+    ['Candidates shown', rows.length.toLocaleString(), `${new Set(rows.map(r=>r.race)).size} races`],
+    [`<span class="sw" style="background:var(--dem)"></span>Median Dem vs ${base}`, fmt(med('D')), `${n('D')} candidates with a baseline`],
+    [`<span class="sw" style="background:var(--rep)"></span>Median Rep vs ${base}`, fmt(med('R')), `${n('R')} candidates with a baseline`],
+    ['Biggest overperformer', best?fmt(best[k]):'—', best?`${esc(best.name)} (${best.partyLabel}), ${best.race}`:'']
+  ];
+  document.getElementById('tiles').innerHTML=t.map(([a,b,c])=>`<div class="card tile"><div class="k">${a}</div><div class="v">${b}</div><div class="d">${c}</div></div>`).join('');
+}
+
+/* ---------- scatter ---------- */
+const SHAPE={
+  D:(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}"/>`,
+  R:(x,y,r)=>`<rect x="${x-r*.9}" y="${y-r*.9}" width="${r*1.8}" height="${r*1.8}" rx="1"/>`,
+  I:(x,y,r)=>`<path d="M${x},${y-r*1.15}L${x+r*1.1},${y+r*.8}L${x-r*1.1},${y+r*.8}Z"/>`
+};
+let PTS=[], SCALE=null;
+function renderChart(rows){
+  const ek=expKey(), base=S.metric==='pvi'?'PVI-implied margin':'2024 presidential margin';
+  document.getElementById('chart-title').textContent=`Actual 2026 margin vs. ${base}`;
+  const pts=rows.filter(r=>r[ek]!=null&&r.margin!=null);
+  const box=document.getElementById('chart');
+  const W=Math.max(320,box.clientWidth), H=Math.round(Math.min(560,Math.max(320,W*.62)));
+  const m={l:46,r:14,t:12,b:40};
+  const ext=Math.max(20,...pts.map(p=>Math.max(Math.abs(p[ek]),Math.abs(p.margin))));
+  const lim=Math.min(100,Math.ceil(ext/10)*10);
+  const x=v=>m.l+(v+lim)/(2*lim)*(W-m.l-m.r), y=v=>m.t+(lim-v)/(2*lim)*(H-m.t-m.b);
+  SCALE={x,y};
+  const ticks=[];for(let v=-lim;v<=lim;v+=lim>=60?20:10)ticks.push(v);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter of each candidate's actual margin against the ${base}">`;
+  // over-performance band (above diagonal)
+  s+=`<path d="M${x(-lim)},${y(-lim)}L${x(lim)},${y(lim)}L${x(-lim)},${y(lim)}Z" fill="var(--over-band)"/>`;
+  for(const v of ticks){
+    s+=`<line x1="${x(v)}" x2="${x(v)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--grid)"/>`;
+    s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/>`;
+    s+=`<text x="${x(v)}" y="${H-m.b+16}" font-size="11" text-anchor="middle" fill="var(--text-muted)">${fmt(v).replace('.0','')}</text>`;
+    s+=`<text x="${m.l-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="var(--text-muted)">${fmt(v).replace('.0','')}</text>`;
+  }
+  s+=`<line x1="${x(0)}" x2="${x(0)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--text-muted)" stroke-opacity=".5"/>`;
+  s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(0)}" y2="${y(0)}" stroke="var(--text-muted)" stroke-opacity=".5"/>`;
+  s+=`<line x1="${x(-lim)}" y1="${y(-lim)}" x2="${x(lim)}" y2="${y(lim)}" stroke="var(--text-secondary)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  s+=`<text x="${x(-lim)+8}" y="${y(lim)+16}" font-size="12" fill="var(--text-secondary)">▲ Ran ahead of baseline</text>`;
+  s+=`<text x="${x(lim)-8}" y="${y(-lim)-8}" font-size="12" text-anchor="end" fill="var(--text-secondary)">Ran behind ▼</text>`;
+  s+=`<text x="${(m.l+W-m.r)/2}" y="${H-6}" font-size="12" text-anchor="middle" fill="var(--text-secondary)">${base} (candidate's party view)</text>`;
+  s+=`<text transform="translate(12,${(m.t+H-m.b)/2}) rotate(-90)" font-size="12" text-anchor="middle" fill="var(--text-secondary)">Actual 2026 margin</text>`;
+  const r=W<520?3.5:4.5;
+  for(const p of ['I','R','D']){
+    s+=`<g fill="${COLOR[p]}" fill-opacity=".78" stroke="var(--surface-1)" stroke-width="1">`;
+    for(const d of pts) if(d.party===p) s+=SHAPE[p](x(d[ek]),y(d.margin),r);
+    s+='</g>';
+  }
+  s+=`<g id="hl"></g><rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/></svg>`;
+  const tip=document.getElementById('tip');
+  box.innerHTML=s; box.appendChild(tip);
+  PTS=pts.map(d=>({d,px:x(d[ek]),py:y(d.margin)}));
+  const svg=box.querySelector('svg'), hit=box.querySelector('#hit'), hl=box.querySelector('#hl');
+  const move=e=>{
+    const pt=svg.getBoundingClientRect(), sc=W/pt.width;
+    const mx=(e.clientX-pt.left)*sc, my=(e.clientY-pt.top)*sc;
+    let best=null,bd=(W<520?22:16)**2;
+    for(const q of PTS){const dd=(q.px-mx)**2+(q.py-my)**2;if(dd<bd){bd=dd;best=q;}}
+    if(!best){tip.style.opacity=0;hl.innerHTML='';return;}
+    const d=best.d;
+    hl.innerHTML=`<g fill="${COLOR[d.party]}" stroke="var(--text-primary)" stroke-width="2">${SHAPE[d.party](best.px,best.py,r+2.5)}</g>`;
+    tip.innerHTML=`<b>${esc(d.name)}</b> <span class="muted">(${d.partyLabel})</span><div class="muted" style="margin-bottom:4px">${d.race} · ${d.won?'Won':'Lost'}${d.called?'':' · not called'}</div>
+      <div class="row"><span>${S.metric==='pvi'?'PVI ('+d.pvi+') implies':'2024 margin'}</span><span>${fmt(d[ek])}</span></div>
+      <div class="row"><span>2026 margin</span><span>${fmt(d.margin)}</span></div>
+      <div class="row"><span><b>Over/under</b></span><span><b>${fmt(d[vsKey()])}</b></span></div>`;
+    const bw=box.clientWidth, tx=best.px/sc, ty=best.py/sc;
+    tip.style.left=Math.min(bw-210,Math.max(0,tx+12))+'px';
+    tip.style.top=Math.max(0,ty-90)+'px'; tip.style.opacity=1;
+  };
+  hit.addEventListener('pointermove',move); hit.addEventListener('pointerdown',move);
+  hit.addEventListener('pointerleave',()=>{tip.style.opacity=0;hl.innerHTML='';});
+  const missing=rows.length-pts.length;
+  document.getElementById('chart-note').textContent = missing>0 ? `${missing} of the ${rows.length} filtered candidates aren't plotted because they have no ${S.metric==='pvi'?'D-vs-R comparison':'2024 baseline (redrawn district, same-party race or missing data)'}.` : '';
+}
+
+/* ---------- legend ---------- */
+document.getElementById('legend').innerHTML=
+  [['D','Democrat','●'],['R','Republican','■'],['I','Independent / other','▲']]
+  .map(([p,l,g])=>`<span><span style="color:${COLOR[p]};font-size:13px">${g}</span>${l}</span>`).join('')+
+  `<span><svg width="22" height="8"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--text-secondary)" stroke-width="1.5" stroke-dasharray="5 4"/></svg>Matched baseline</span>`;
+
+/* ---------- table ---------- */
+const COLS=[
+  ['name','Candidate'],['partyLabel','Party'],['race','Race'],['body','Body'],['inc','Incumbency'],
+  ['pvi','PVI'],['exp','Baseline',1],['margin','2026 margin',1],['vs','Over/under',1],['won','Result'],['called','Call']
+];
+let LIMIT=150;
+function val(r,k){ if(k==='exp')return r[expKey()]; if(k==='vs')return r[vsKey()]; if(k==='pvi'){const n=r.pvi==='EVEN'?0:parseFloat((r.pvi||'').slice(2))*(r.pvi&&r.pvi[0]==='R'?-1:1);return isNaN(n)?null:n;} return r[k]; }
+function renderTable(rows){
+  const k=sortKey||'vs';
+  rows=[...rows].sort((a,b)=>{const va=val(a,k),vb=val(b,k);if(va==null&&vb==null)return 0;if(va==null)return 1;if(vb==null)return -1;return (va>vb?1:va<vb?-1:0)*sortDir;});
+  const base=S.metric==='pvi'?'PVI-implied':'2024 margin';
+  document.querySelector('#tbl thead').innerHTML='<tr>'+COLS.map(([c,l,n])=>`<th class="${n?'num':''}" data-k="${c}" aria-sort="${k===c?(sortDir>0?'ascending':'descending'):'none'}" tabindex="0">${c==='exp'?base:l}</th>`).join('')+'</tr>';
+  document.querySelectorAll('#tbl th').forEach(th=>{const go=()=>{const c=th.dataset.k;if(sortKey===c||(!sortKey&&c==='vs'))sortDir*=-1;else{sortKey=c;sortDir=['name','race','partyLabel','body','inc'].includes(c)?1:-1;}render();};th.onclick=go;th.onkeydown=e=>{if(e.key==='Enter')go();};});
+  const maxAbs=Math.max(1,...rows.map(r=>Math.abs(r[vsKey()]||0)));
+  document.querySelector('#tbl tbody').innerHTML=rows.slice(0,LIMIT).map(r=>{
+    const v=r[vsKey()];
+    const bar=v==null?'':`<span class="bar" style="width:${Math.round(Math.abs(v)/maxAbs*44)+2}px;background:${COLOR[r.party]};opacity:${v>=0?.85:.35}"></span>`;
+    return `<tr><td><span style="color:${COLOR[r.party]}">${r.party==='D'?'●':r.party==='R'?'■':'▲'}</span> ${esc(r.name)}</td><td>${r.partyLabel}</td><td>${r.race}</td><td>${r.body}</td><td>${r.inc}</td><td>${r.pvi||'—'}</td>
+      <td class="num">${fmt(r[expKey()])}</td><td class="num">${fmt(r.margin)}</td><td class="num"><span class="${v>0?'pos':'neg'}">${fmt(v)}</span>${bar}</td>
+      <td>${r.won?'Won':'Lost'}</td><td class="muted">${r.certified?'Certified':r.called?'Called':'Not called ('+(r.pctIn??'?')+'% in)'}</td></tr>`;}).join('');
+  document.getElementById('tbl-note').innerHTML = rows.length>LIMIT ? `Showing ${LIMIT} of ${rows.length}. <button class="btn" id="more">Show all</button>` : `${rows.length} candidates.`;
+  const mb=document.getElementById('more'); if(mb) mb.onclick=()=>{LIMIT=1e9;render();};
+  return rows;
+}
+let LAST=[];
+function csvText(){
+  const hdr=['candidate','party','race','body','state','incumbency','pvi','pvi_implied_margin','pres2024_margin','margin_2026','vs_pvi','vs_2024','share','votes','won','called'];
+  const lines=[hdr.join(',')].concat(LAST.map(r=>[r.name,r.partyLabel,r.race,r.body,r.state,r.inc,r.pvi,r.expPvi,r.exp24,r.margin,r.vsPvi,r.vs24,r.share,r.votes,r.won,r.called].map(v=>v==null?'':/[",]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:v).join(',')));
+  return lines.join('\n');
+}
+document.getElementById('csv').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csvText()],{type:'text/csv'}));a.download='2026_candidates_vs_pvi.csv';a.click();};
+document.getElementById('copy').onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(csvText());b.textContent='Copied ✓';}catch(err){b.textContent='Copy blocked';}setTimeout(()=>b.textContent='Copy CSV',1800);};
+
+/* ---------- theme ---------- */
+document.getElementById('theme').onclick=()=>{
+  const root=document.documentElement, dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme=dark?'light':'dark'; try{localStorage.setItem('pvi-theme',root.dataset.theme);}catch(e){}
+};
+try{const t=localStorage.getItem('pvi-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}
+
+function render(){ const rows=filtered(); renderTiles(rows); renderChart(rows); LAST=renderTable(rows); }
+renderControls(); render();
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>renderChart(filtered()),120);});
+</script>
+</body>
+</html>

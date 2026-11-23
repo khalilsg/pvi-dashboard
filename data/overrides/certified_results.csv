@@ -1,0 +1,4 @@
+# Certified results override the tracker. Add one row per candidate; all rows for a race replace that race's results.
+# race uses the dashboard label: "PA-07", "AK-AL", "GA Senate", "OH Senate (special)", "AZ Governor".
+# party: Democratic, Republican, ind, or other. votes: certified total. source: where the number came from.
+race,candidate,party,votes,source
